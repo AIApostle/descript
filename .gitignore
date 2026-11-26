@@ -1,0 +1,56 @@
+# Environment & secrets (keep *.env.example templates tracked)
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Cryptographic private keys (prevent accidental commits)
+*.pem
+*.key
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Python & uv artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.Python
+.venv/
+venv/
+build/
+dist/
+wheels/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Node / Vite / TypeScript artifacts
+node_modules/
+dist-ssr/
+*.local
+*.tsbuildinfo
+.eslintcache
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.sw?

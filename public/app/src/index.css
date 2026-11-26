@@ -1,0 +1,95 @@
+@import '@fontsource/geist/400.css';
+@import '@fontsource/geist/500.css';
+@import '@fontsource/geist/600.css';
+@import '@fontsource/geist/700.css';
+@import '@fontsource/geist-mono/400.css';
+@import '@fontsource/geist-mono/500.css';
+
+@import 'tailwindcss';
+@config '../tailwind.config.js';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  * {
+    @apply border-base-200 dark:border-base-800;
+  }
+
+  html {
+    @apply antialiased;
+    font-feature-settings: 'ss01' on, 'cv01' on;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-base-800 bg-base-0 dark:bg-base-950 dark:text-base-100 transition-colors duration-200;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-descript-500 ring-offset-2 ring-offset-base-0 dark:ring-offset-base-950;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-base-100 dark:bg-base-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-base-300 dark:bg-base-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-base-400 dark:bg-base-600;
+  }
+}
+
+@layer components {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-descript-600 to-identity-600 dark:from-descript-400 dark:to-identity-400;
+  }
+
+  .glass {
+    @apply backdrop-blur-md bg-base-0/85 dark:bg-base-950/85;
+  }
+
+  .container-narrow {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .bytecript-card {
+    width: 6.5in !important;
+    max-width: 100% !important;
+    page-break-inside: avoid;
+    box-shadow: none !important;
+    border: 1.5px solid #1e293b !important;
+  }
+}

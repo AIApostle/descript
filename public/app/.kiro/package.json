@@ -1,0 +1,19 @@
+{
+  "name": "descript-design-taste",
+  "version": "1.0.0",
+  "description": "Design Taste skill for Descript - agent identity platform design system",
+  "type": "module",
+  "scripts": {
+    "design-check": "echo 'Running design compliance check...'",
+    "generate-tokens": "echo 'Generating design tokens...'"
+  },
+  "keywords": ["design", "design-system", "descript", "ui", "ux"],
+  "author": "Descript Platform Team",
+  "license": "MIT",
+  "dependencies": {
+    "design-tokens": "^1.0.0"
+  },
+  "devDependencies": {
+    "style-dictionary": "^3.0.0"
+  }
+}

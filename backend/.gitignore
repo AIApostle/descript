@@ -1,0 +1,24 @@
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Local SQLite fallback DB & private keys
+*.db
+*.sqlite
+*.sqlite3
+*.pem
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info/
+
+# Virtual environments & caches
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/

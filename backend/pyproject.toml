@@ -1,0 +1,50 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Descript Identity Platform API powered by FastAPI and Neon PostgreSQL"
+readme = "README.md"
+authors = [
+    { name = "AI_Apostle", email = "achasaviourikhamate@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.20.1",
+    "cryptography>=50.0.2",
+    "fastapi>=0.165.0",
+    "httpx>=0.28.1",
+    "psycopg[binary,pool]>=3.3.9",
+    "pydantic-settings>=2.16.3",
+    "pyjwt>=2.15.1",
+    "python-multipart>=0.0.34",
+    "sqlalchemy[asyncio]>=2.1.9",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[project.scripts]
+backend = "backend:main"
+descript-api = "backend:main"
+descript-migrate = "backend.cli:migrate_main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "aiosqlite>=0.22.1",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.5.0",
+    "ruff>=0.17.6",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+ignore = ["B008"]
