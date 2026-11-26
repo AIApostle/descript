@@ -333,9 +333,9 @@ export default function DevelopersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-base-50 dark:bg-base-950 flex flex-col">
+    <div className="min-h-screen bg-base-50 dark:bg-base-950 flex flex-col bg-grid-pattern">
       <Navigation />
-      <main className="flex-1 pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl w-full mx-auto">
+      <main className="flex-1 pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl w-full mx-auto">
         {content}
       </main>
       <Footer />

@@ -1,11 +1,14 @@
 import { useMemo, useState } from 'react';
 import {
+  ArrowRight,
   Bot,
+  Code2,
   KeyRound,
   Network,
   Plus,
   Search,
   ShieldCheck,
+  Terminal,
   Upload,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,7 +19,7 @@ import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { useAgents } from '../context/AgentContext';
 import { useNotification } from '../context/NotificationContext';
-import type { AgentCreateDTO } from '../types/agent';
+import type { Agent, AgentCreateDTO } from '../types/agent';
 import { formatRelativeTime, truncateMiddle } from '../utils/formatting';
 
 export default function DashboardPage() {
@@ -31,6 +34,9 @@ export default function DashboardPage() {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [bulkJson, setBulkJson] = useState('');
   const [bulkLoading, setBulkLoading] = useState(false);
+
+  // Quick SDK snippet modal
+  const [sdkModalAgent, setSdkModalAgent] = useState<Agent | null>(null);
 
   const filteredAgents = useMemo(() => {
     return agents.filter((agent) => {
@@ -81,191 +87,243 @@ export default function DashboardPage() {
     }
   };
 
+  const getPythonSnippet = (agentId: string) => `from descript import DescriptClient
+
+client = DescriptClient(api_key="dsc_live_...")
+
+# Fetch agent passport & check Ed25519 signature
+agent = client.agents.get("${agentId}")
+is_valid = client.verify.verify_bytecript(agent.bytecript)
+print(f"Verified {agent.name}: {is_valid}")`;
+
   return (
     <DashboardLayout
-      title="Agent Registry"
-      subtitle="Manage persistent agent identities, Ed25519 credentials, and Bytecript cards."
+      title="Agent Registry & Console"
+      subtitle="Manage persistent identities, client-side Ed25519 key bindings, and Bytecript cards."
       actions={
-        <Button
-          variant="outline"
-          size="sm"
-          icon={<Upload className="h-4 w-4" />}
-          onClick={() => setBulkOpen(true)}
-        >
-          Bulk Import
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            icon={<Upload className="h-3.5 w-3.5" />}
+            onClick={() => setBulkOpen(true)}
+          >
+            Bulk Import
+          </Button>
+          <Link
+            to="/docs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-base-200 dark:border-base-800 text-xs font-medium text-base-700 dark:text-base-300 hover:bg-base-100 dark:hover:bg-base-800"
+          >
+            <Terminal className="h-3.5 w-3.5 text-descript-600 dark:text-descript-400" />
+            <span>Python SDK Docs</span>
+          </Link>
+        </div>
       }
     >
-      {/* Metrics strip */}
+      {/* Metrics Bento Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="rounded-2xl bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 p-5">
-          <div className="flex items-center justify-between text-base-500 dark:text-base-400 text-xs font-medium mb-2">
-            <span>Total Agents</span>
-            <Bot className="h-4 w-4 text-descript-600 dark:text-descript-400" />
+        <div className="double-bezel">
+          <div className="double-bezel-inner p-5">
+            <div className="flex items-center justify-between text-base-400 text-xs font-semibold uppercase tracking-wider mb-2">
+              <span>Total Fleet</span>
+              <Bot className="h-4 w-4 text-descript-600 dark:text-descript-400" />
+            </div>
+            <div className="text-3xl font-extrabold text-base-950 dark:text-white">
+              {stats.total}
+            </div>
+            <div className="text-[11px] text-base-500 mt-1">UUIDv7 canonical agents</div>
           </div>
-          <div className="text-2xl font-bold text-base-900 dark:text-white">{stats.total}</div>
         </div>
-        <div className="rounded-2xl bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 p-5">
-          <div className="flex items-center justify-between text-base-500 dark:text-base-400 text-xs font-medium mb-2">
-            <span>Active Identities</span>
-            <ShieldCheck className="h-4 w-4 text-identity-600 dark:text-identity-400" />
+
+        <div className="double-bezel">
+          <div className="double-bezel-inner p-5">
+            <div className="flex items-center justify-between text-base-400 text-xs font-semibold uppercase tracking-wider mb-2">
+              <span>Active Identities</span>
+              <ShieldCheck className="h-4 w-4 text-identity-600 dark:text-identity-400" />
+            </div>
+            <div className="text-3xl font-extrabold text-identity-600 dark:text-identity-400">
+              {stats.active}
+            </div>
+            <div className="text-[11px] text-base-500 mt-1">Passing verification checks</div>
           </div>
-          <div className="text-2xl font-bold text-base-900 dark:text-white">{stats.active}</div>
         </div>
-        <div className="rounded-2xl bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 p-5">
-          <div className="flex items-center justify-between text-base-500 dark:text-base-400 text-xs font-medium mb-2">
-            <span>Active Keys</span>
-            <KeyRound className="h-4 w-4 text-trust-600 dark:text-trust-400" />
+
+        <div className="double-bezel">
+          <div className="double-bezel-inner p-5">
+            <div className="flex items-center justify-between text-base-400 text-xs font-semibold uppercase tracking-wider mb-2">
+              <span>Bound Keys</span>
+              <KeyRound className="h-4 w-4 text-trust-600 dark:text-trust-400" />
+            </div>
+            <div className="text-3xl font-extrabold text-base-950 dark:text-white">
+              {stats.activeKeys}
+            </div>
+            <div className="text-[11px] text-base-500 mt-1">Ed25519 active credentials</div>
           </div>
-          <div className="text-2xl font-bold text-base-900 dark:text-white">{stats.activeKeys}</div>
         </div>
-        <div className="rounded-2xl bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 p-5">
-          <div className="flex items-center justify-between text-base-500 dark:text-base-400 text-xs font-medium mb-2">
-            <span>Byte Networks</span>
-            <Network className="h-4 w-4 text-descript-600 dark:text-descript-400" />
-          </div>
-          <div className="text-2xl font-bold text-base-900 dark:text-white">
-            {stats.activeNetworks}
+
+        <div className="double-bezel">
+          <div className="double-bezel-inner p-5">
+            <div className="flex items-center justify-between text-base-400 text-xs font-semibold uppercase tracking-wider mb-2">
+              <span>Byte Networks</span>
+              <Network className="h-4 w-4 text-descript-600 dark:text-descript-400" />
+            </div>
+            <div className="text-3xl font-extrabold text-base-950 dark:text-white">
+              {stats.activeNetworks}
+            </div>
+            <div className="text-[11px] text-base-500 mt-1">Governed namespaces</div>
           </div>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search className="h-4 w-4 text-base-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by agent name or agent_ ID..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-base-200 dark:border-base-800 bg-white dark:bg-base-900 text-sm text-base-900 dark:text-base-100 outline-none focus:border-descript-500"
-          />
+      {/* Filter Bar with Status Chips */}
+      <div className="space-y-3 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="h-4 w-4 text-base-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by agent name, ID, or description..."
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-base-200 dark:border-base-800 bg-white dark:bg-base-900 text-sm text-base-900 dark:text-base-100 outline-none focus:ring-2 focus:ring-descript-500/50 shadow-2xs"
+            />
+          </div>
+
+          <select
+            aria-label="Filter by Byte Network"
+            value={networkFilter}
+            onChange={(e) => setNetworkFilter(e.target.value)}
+            className="px-3.5 py-2.5 rounded-xl border border-base-200 dark:border-base-800 bg-white dark:bg-base-900 text-sm text-base-800 dark:text-base-100 shadow-2xs font-medium"
+          >
+            <option value="all">All Byte Networks</option>
+            {networks.map((net) => (
+              <option key={net.slug} value={net.slug}>
+                {net.name} ({net.slug})
+              </option>
+            ))}
+          </select>
         </div>
 
-        <select
-          aria-label="Filter by status"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3.5 py-2.5 rounded-xl border border-base-200 dark:border-base-800 bg-white dark:bg-base-900 text-sm text-base-800 dark:text-base-100"
-        >
-          <option value="all">All Statuses</option>
-          <option value="active">Active</option>
-          <option value="suspended">Suspended</option>
-          <option value="pending">Pending</option>
-          <option value="compromised">Compromised</option>
-          <option value="revoked">Revoked</option>
-        </select>
-
-        <select
-          aria-label="Filter by Byte Network"
-          value={networkFilter}
-          onChange={(e) => setNetworkFilter(e.target.value)}
-          className="px-3.5 py-2.5 rounded-xl border border-base-200 dark:border-base-800 bg-white dark:bg-base-900 text-sm text-base-800 dark:text-base-100"
-        >
-          <option value="all">All Networks</option>
-          {networks.map((net) => (
-            <option key={net.slug} value={net.slug}>
-              {net.name} ({net.slug})
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Content */}
-      {isLoading ? (
-        <div className="grid md:grid-cols-2 gap-4">
-          {[1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              className="h-44 rounded-2xl bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 p-6 animate-pulse"
+        {/* Status quick tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-medium">
+          {['all', 'active', 'suspended', 'revoked'].map((status) => (
+            <button
+              key={status}
+              type="button"
+              onClick={() => setStatusFilter(status)}
+              className={`px-3 py-1.5 rounded-lg capitalize transition-all ${
+                statusFilter === status
+                  ? 'bg-base-900 dark:bg-white text-white dark:text-base-950 font-semibold shadow-xs'
+                  : 'bg-base-100/80 dark:bg-base-900 text-base-600 dark:text-base-400 hover:text-base-900 dark:hover:text-white'
+              }`}
             >
-              <div className="h-5 w-40 bg-base-200 dark:bg-base-800 rounded mb-3" />
-              <div className="h-4 w-64 bg-base-100 dark:bg-base-800 rounded mb-6" />
-              <div className="h-10 w-full bg-base-100 dark:bg-base-800 rounded" />
+              {status}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Agents Grid */}
+      {isLoading ? (
+        <div className="grid md:grid-cols-2 gap-5">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="double-bezel animate-pulse">
+              <div className="double-bezel-inner h-48 p-6" />
             </div>
           ))}
         </div>
       ) : filteredAgents.length === 0 ? (
-        <div className="rounded-2xl bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 p-12 text-center">
-          <div className="h-14 w-14 mx-auto rounded-2xl bg-descript-50 dark:bg-descript-950/60 text-descript-600 dark:text-descript-400 flex items-center justify-center mb-4">
-            <Bot className="h-7 w-7" />
+        <div className="double-bezel">
+          <div className="double-bezel-inner p-12 text-center">
+            <div className="h-16 w-16 mx-auto rounded-2xl bg-descript-50 dark:bg-descript-950/80 text-descript-600 dark:text-descript-400 flex items-center justify-center mb-4">
+              <Bot className="h-8 w-8" />
+            </div>
+            <h2 className="text-xl font-bold text-base-950 dark:text-white mb-2">
+              {agents.length === 0 ? 'No agents registered yet' : 'No matching agents found'}
+            </h2>
+            <p className="text-sm text-base-500 max-w-md mx-auto mb-6 leading-relaxed">
+              {agents.length === 0
+                ? 'Register your first autonomous agent to generate a canonical Agent ID, bind an Ed25519 keypair, and issue a signed Bytecript passport.'
+                : 'Try adjusting your search query or status filter.'}
+            </p>
+            <Button
+              icon={<Plus className="h-4 w-4" />}
+              onClick={() => navigate('/agents/new')}
+              size="lg"
+            >
+              Register First Agent
+            </Button>
           </div>
-          <h2 className="text-lg font-semibold text-base-900 dark:text-white mb-2">
-            {agents.length === 0 ? 'No agents registered yet' : 'No matching agents found'}
-          </h2>
-          <p className="text-sm text-base-600 dark:text-base-400 max-w-md mx-auto mb-6">
-            {agents.length === 0
-              ? 'Register your first AI agent to generate a canonical Agent ID, bind an Ed25519 keypair, and issue its Bytecript digital card.'
-              : 'Try adjusting your search query or status filter.'}
-          </p>
-          <Button icon={<Plus className="h-4 w-4" />} onClick={() => navigate('/agents/new')}>
-            Register First Agent
-          </Button>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-5">
           {filteredAgents.map((agent) => {
-            const activeCred =
-              agent.credentials.find((c) => c.status === 'active') || agent.credentials[0];
             return (
-              <div
-                key={agent.id}
-                className="group rounded-2xl bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 p-6 hover:border-descript-300 dark:hover:border-descript-700 hover:shadow-md transition-all"
-              >
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <div className="min-w-0">
+              <div key={agent.id} className="double-bezel group">
+                <div className="double-bezel-inner h-full flex flex-col justify-between p-6">
+                  <div>
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="min-w-0 flex-1">
+                        <Link
+                          to={`/agents/${agent.id}`}
+                          className="text-lg font-bold text-base-950 dark:text-white hover:text-descript-600 dark:hover:text-descript-400 transition-colors block truncate"
+                        >
+                          {agent.name}
+                        </Link>
+                        <p className="text-xs text-base-500 line-clamp-1 mt-0.5">
+                          {agent.description || 'No description provided'}
+                        </p>
+                      </div>
+                      <StatusBadge status={agent.status} size="sm" />
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-base-50 dark:bg-base-900 border border-base-200/80 dark:border-base-800/80 mb-4">
+                      <span className="font-mono text-xs text-base-800 dark:text-base-200 truncate">
+                        {truncateMiddle(agent.id, 14, 10)}
+                      </span>
+                      <CopyButton text={agent.id} label="Copy ID" />
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3 text-xs mb-4 p-3 rounded-xl bg-base-50/50 dark:bg-base-900/40 border border-base-200/50 dark:border-base-800/50">
+                      <div>
+                        <div className="text-[10px] uppercase font-semibold text-base-400">Network</div>
+                        <div className="font-mono font-medium text-base-900 dark:text-base-100 mt-0.5">
+                          {agent.byteNetwork}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase font-semibold text-base-400">Keys</div>
+                        <div className="font-medium text-base-900 dark:text-base-100 mt-0.5">
+                          {agent.credentials.filter((c) => c.status === 'active').length} active
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase font-semibold text-base-400">Updated</div>
+                        <div className="font-medium text-base-900 dark:text-base-100 mt-0.5">
+                          {formatRelativeTime(agent.updatedAt)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-base-200 dark:border-base-800 flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSdkModalAgent(agent)}
+                      className="inline-flex items-center gap-1.5 text-xs text-base-600 dark:text-base-400 hover:text-base-950 dark:hover:text-white font-medium"
+                    >
+                      <Code2 className="h-3.5 w-3.5" />
+                      <span>Python Code</span>
+                    </button>
+
                     <Link
                       to={`/agents/${agent.id}`}
-                      className="text-lg font-semibold text-base-900 dark:text-white hover:text-descript-600 dark:hover:text-descript-400 transition-colors block truncate"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-descript-600 dark:text-descript-400 hover:underline"
                     >
-                      {agent.name}
+                      <span>View Bytecript</span>
+                      <ArrowRight className="h-3 w-3" />
                     </Link>
-                    <p className="text-xs text-base-500 dark:text-base-400 line-clamp-2 mt-0.5">
-                      {agent.description || 'No description provided'}
-                    </p>
                   </div>
-                  <StatusBadge status={agent.status} size="sm" />
-                </div>
-
-                <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-base-50 dark:bg-base-950 border border-base-200 dark:border-base-800 mb-4">
-                  <span className="font-mono text-xs text-base-700 dark:text-base-300 truncate">
-                    {truncateMiddle(agent.id, 14, 10)}
-                  </span>
-                  <CopyButton text={agent.id} label="Copy ID" />
-                </div>
-
-                <div className="grid grid-cols-3 gap-3 text-xs mb-4">
-                  <div>
-                    <div className="text-base-500 dark:text-base-400">Network</div>
-                    <div className="font-mono font-medium text-base-900 dark:text-base-100 mt-0.5">
-                      {agent.byteNetwork}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-base-500 dark:text-base-400">Active Keys</div>
-                    <div className="font-medium text-base-900 dark:text-base-100 mt-0.5">
-                      {agent.credentials.filter((c) => c.status === 'active').length}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-base-500 dark:text-base-400">Updated</div>
-                    <div className="font-medium text-base-900 dark:text-base-100 mt-0.5">
-                      {formatRelativeTime(agent.updatedAt)}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-base-200 dark:border-base-800 flex items-center justify-between gap-3">
-                  <span className="font-mono text-[11px] text-base-500 dark:text-base-400 truncate">
-                    {activeCred ? `FP: ${activeCred.fingerprint.slice(0, 16)}...` : 'No credential'}
-                  </span>
-                  <Link
-                    to={`/agents/${agent.id}`}
-                    className="text-xs font-semibold text-descript-600 dark:text-descript-400 hover:underline shrink-0"
-                  >
-                    View Bytecript
-                  </Link>
                 </div>
               </div>
             );
@@ -273,6 +331,7 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Bulk Import Modal */}
       <Modal
         isOpen={bulkOpen}
         onClose={() => setBulkOpen(false)}
@@ -304,6 +363,32 @@ export default function DashboardPage() {
           />
         </div>
       </Modal>
+
+      {/* Quick Python SDK Code Modal */}
+      {sdkModalAgent && (
+        <Modal
+          isOpen={Boolean(sdkModalAgent)}
+          onClose={() => setSdkModalAgent(null)}
+          title={`Python Integration: ${sdkModalAgent.name}`}
+          footer={
+            <Button variant="secondary" onClick={() => setSdkModalAgent(null)}>
+              Done
+            </Button>
+          }
+        >
+          <div className="space-y-3">
+            <p className="text-xs text-base-600 dark:text-base-400">
+              Integrate this agent identity directly into your Python service or multi-agent swarm:
+            </p>
+            <pre className="p-4 rounded-xl bg-base-950 text-base-100 font-mono text-xs leading-relaxed overflow-x-auto">
+              <code>{getPythonSnippet(sdkModalAgent.id)}</code>
+            </pre>
+            <div className="flex justify-end">
+              <CopyButton text={getPythonSnippet(sdkModalAgent.id)} label="Copy Snippet" />
+            </div>
+          </div>
+        </Modal>
+      )}
     </DashboardLayout>
   );
 }

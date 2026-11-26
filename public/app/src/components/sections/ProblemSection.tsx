@@ -1,77 +1,137 @@
-import { AlertTriangle, Link, ShieldOff, UserX } from 'lucide-react';
+import {
+  CheckCircle2,
+  ShieldAlert,
+  ShieldCheck,
+  UserX,
+  XCircle,
+} from 'lucide-react';
 
 export default function ProblemSection() {
-  const problems = [
+  const failureModes = [
     {
-      icon: <UserX className="h-6 w-6" />,
-      title: 'Agent Anonymity',
-      description:
-        'AI agents operate without persistent identities, making them impossible to recognize or trust across sessions.',
-      impact: 'Cannot establish reputation or accountability',
+      title: 'Shared Static Secrets',
+      traditional: 'Hardcoded API tokens in prompts or config files vulnerable to exfiltration.',
+      descript: 'Asymmetric Ed25519 keypairs. Private keys never leave the agent runtime.',
     },
     {
-      icon: <Link className="h-6 w-6" />,
-      title: 'Fragmented Presence',
-      description:
-        'The same agent exists with different IDs across platforms, apps, and interactions.',
-      impact: 'No unified identity across the agent economy',
+      title: 'Ephemeral Session Amnesia',
+      traditional: 'Agents lose identity between container reboots or provider migrations.',
+      descript: 'Permanent UUIDv7 Agent IDs persisted canonically in Neon PostgreSQL.',
     },
     {
-      icon: <ShieldOff className="h-6 w-6" />,
-      title: 'No Verification',
-      description:
-        'Without cryptographic proof of identity, agents cannot prove who they are or what they are authorized to do.',
-      impact: 'Impossible to build trust-based systems',
+      title: 'Forged Payloads & Impersonation',
+      traditional: 'No mathematical proof that output originated from a specific agent model.',
+      descript: 'Challenge-response signatures and signed Bytecript identity cards.',
     },
     {
-      icon: <AlertTriangle className="h-6 w-6" />,
-      title: 'Unreachable Agents',
-      description:
-        'Once an interaction ends, there is no canonical identifier to verify or reconnect with that specific agent.',
-      impact: 'No persistent verification channels',
+      title: 'Cross-Network Isolation',
+      traditional: 'Identities are platform-locked silos unable to interact with external services.',
+      descript: 'Byte Networks provide namespace governance and public verification APIs.',
     },
   ];
 
   return (
-    <section
-      id="problem"
-      className="py-20 md:py-24 bg-base-50 dark:bg-base-900/50 relative overflow-hidden"
-    >
-      <div className="container-narrow relative">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <h2 className="text-3xl md:text-4xl font-semibold text-base-900 dark:text-white mb-4">
-            The internet was not built for AI agents
+    <section id="problem" className="py-24 sm:py-32 bg-base-50/70 dark:bg-base-900/40 relative">
+      <div className="container-wide">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-50 dark:bg-red-950/80 text-red-700 dark:text-red-300 border border-red-200/80 dark:border-red-800/80 mb-4">
+            <ShieldAlert className="h-3.5 w-3.5" />
+            <span>The Identity Crisis in Autonomous AI</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-base-950 dark:text-white mb-5 leading-tight">
+            The internet was built for humans. Not autonomous agents.
           </h2>
-
-          <p className="text-base md:text-lg text-base-600 dark:text-base-300 leading-relaxed">
-            Today, AI agents operate in a world designed for humans, relying on fragile session tokens and platform-locked identifiers.
+          <p className="text-base sm:text-lg text-base-600 dark:text-base-300 leading-relaxed">
+            When autonomous agents communicate with APIs, financial systems, or peer agents,
+            relying on bearer tokens is an existential security flaw.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {problems.map((problem, index) => (
-            <div
-              key={index}
-              className="group bg-white dark:bg-base-900 rounded-xl border border-base-200 dark:border-base-800 p-7 hover:border-descript-300 dark:hover:border-descript-700 hover:shadow-lg transition-all duration-200"
-            >
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 h-11 w-11 rounded-lg bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center group-hover:bg-descript-50 dark:group-hover:bg-descript-950 group-hover:text-descript-600 dark:group-hover:text-descript-400 transition-colors">
-                  {problem.icon}
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-base-900 dark:text-white mb-1.5">
-                    {problem.title}
-                  </h3>
-                  <p className="text-sm text-base-600 dark:text-base-300 mb-3 leading-relaxed">
-                    {problem.description}
-                  </p>
-                  <div className="text-xs font-medium text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-950/50 px-3 py-1 rounded-full inline-block">
-                    {problem.impact}
+        {/* Comparison Bento Grid */}
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
+          {/* Card 1: Traditional Fragile State */}
+          <div className="double-bezel">
+            <div className="double-bezel-inner h-full flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-10 w-10 rounded-xl bg-red-100 dark:bg-red-950/80 text-red-600 dark:text-red-400 flex items-center justify-center">
+                    <UserX className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400">
+                      Vulnerable Pattern
+                    </span>
+                    <h3 className="text-xl font-bold text-base-900 dark:text-white">
+                      Bearer Tokens & Ephemeral State
+                    </h3>
                   </div>
                 </div>
+
+                <div className="space-y-4 mb-6">
+                  {failureModes.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-base-50/80 dark:bg-base-900/40 border border-base-200/60 dark:border-base-800/60">
+                      <XCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-xs font-semibold text-base-900 dark:text-base-200 mb-0.5">
+                          {item.title}
+                        </div>
+                        <div className="text-xs text-base-500 dark:text-base-400 leading-relaxed">
+                          {item.traditional}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200/60 dark:border-red-900/40 text-xs text-red-700 dark:text-red-300 font-medium">
+                Result: Zero audit accountability, unverified agent impersonation, and prompt extraction risks.
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Card 2: Descript Architecture */}
+          <div className="double-bezel">
+            <div className="double-bezel-inner h-full flex flex-col justify-between border-descript-200/80 dark:border-descript-800/80">
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-10 w-10 rounded-xl bg-identity-100 dark:bg-identity-950/80 text-identity-600 dark:text-identity-400 flex items-center justify-center">
+                    <ShieldCheck className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-identity-600 dark:text-identity-400">
+                      Descript Architecture
+                    </span>
+                    <h3 className="text-xl font-bold text-base-900 dark:text-white">
+                      Zero-Trust Cryptographic Identity
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="space-y-4 mb-6">
+                  {failureModes.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-identity-50/30 dark:bg-identity-950/20 border border-identity-200/40 dark:border-identity-800/40">
+                      <CheckCircle2 className="h-4 w-4 text-identity-600 dark:text-identity-400 shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-xs font-semibold text-base-900 dark:text-base-200 mb-0.5">
+                          {item.title}
+                        </div>
+                        <div className="text-xs text-base-600 dark:text-base-300 leading-relaxed">
+                          {item.descript}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-identity-50 dark:bg-identity-950/50 border border-identity-200/80 dark:border-identity-800/80 text-xs text-identity-800 dark:text-identity-200 font-medium flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-identity-500 animate-pulse" />
+                <span>Mathematical trust verifiable offline or via real-time challenge nonces.</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

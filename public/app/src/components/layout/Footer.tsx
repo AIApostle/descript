@@ -1,106 +1,112 @@
-import { Code, Cpu, Fingerprint, ShieldCheck } from 'lucide-react';
+import { Fingerprint } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
-  const productLinks = [
-    { label: 'Agent Dashboard', to: '/dashboard' },
-    { label: 'Register Agent', to: '/agents/new' },
-    { label: 'Verify Bytecript', to: '/verify' },
-  ];
-
-  const developerLinks = [
-    { label: 'Python SDK Guide', to: '/docs' },
-    { label: 'Developer API Keys', to: '/developers' },
-    { label: 'Public Resolver', to: '/verify' },
-  ];
-
-  const platformLinks = [
-    { label: 'Sign In', to: '/login' },
-    { label: 'Create Account', to: '/signup' },
-    { label: 'Settings', to: '/settings' },
-  ];
-
   return (
-    <footer className="bg-base-900 text-white no-print">
+    <footer className="border-t border-base-200 dark:border-base-800 bg-white dark:bg-base-950 py-12 sm:py-16 no-print">
       <div className="container-wide">
-        <div className="py-14 border-b border-base-800">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-descript-600 text-white">
-                  <Fingerprint className="h-5 w-5" />
-                </div>
-                <div className="font-semibold text-xl">Descript</div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+          {/* Brand Info */}
+          <div className="col-span-2">
+            <Link to="/" className="flex items-center gap-2.5 mb-4">
+              <div className="h-8 w-8 rounded-full bg-descript-600 text-white flex items-center justify-center">
+                <Fingerprint className="h-4 w-4" />
               </div>
-              <p className="text-base-400 text-sm leading-relaxed max-w-xs">
-                Cryptographic identity infrastructure and Bytecript credentials for AI agents.
-              </p>
+              <span className="font-semibold text-lg text-base-950 dark:text-white">Descript</span>
+            </Link>
+            <p className="text-xs sm:text-sm text-base-500 dark:text-base-400 max-w-sm leading-relaxed mb-4">
+              The cryptographic identity, credential registration, and verification standard for autonomous AI agents.
+            </p>
+            <div className="flex items-center gap-2 text-xs text-base-400 font-mono">
+              <span className="h-2 w-2 rounded-full bg-identity-500 animate-pulse" />
+              <span>Neon PostgreSQL • Ed25519 Engine</span>
             </div>
+          </div>
 
-            <div>
-              <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
-                <Fingerprint className="h-4 w-4 text-descript-400" />
-                Platform
-              </h3>
-              <ul className="space-y-2.5">
-                {productLinks.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      to={link.to}
-                      className="text-base-400 hover:text-white transition-colors text-sm"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          {/* Product links */}
+          <div>
+            <div className="text-xs font-bold uppercase tracking-wider text-base-900 dark:text-white mb-3">
+              Platform
             </div>
+            <ul className="space-y-2 text-xs sm:text-sm text-base-500 dark:text-base-400">
+              <li>
+                <Link to="/verify" className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  Verify Agent
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard" className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  Agent Console
+                </Link>
+              </li>
+              <li>
+                <Link to="/agents/new" className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  Register Agent
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-            <div>
-              <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
-                <Code className="h-4 w-4 text-descript-400" />
-                Developers
-              </h3>
-              <ul className="space-y-2.5">
-                {developerLinks.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      to={link.to}
-                      className="text-base-400 hover:text-white transition-colors text-sm"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          {/* Developers */}
+          <div>
+            <div className="text-xs font-bold uppercase tracking-wider text-base-900 dark:text-white mb-3">
+              Developers
             </div>
+            <ul className="space-y-2 text-xs sm:text-sm text-base-500 dark:text-base-400">
+              <li>
+                <Link to="/docs" className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  Python SDK Docs
+                </Link>
+              </li>
+              <li>
+                <Link to="/developers" className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  API Keys & Health
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/AIApostle/descript"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-base-900 dark:hover:text-white transition-colors flex items-center gap-1"
+                >
+                  <span>GitHub Repository</span>
+                </a>
+              </li>
+            </ul>
+          </div>
 
-            <div>
-              <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-descript-400" />
-                Account
-              </h3>
-              <ul className="space-y-2.5">
-                {platformLinks.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      to={link.to}
-                      className="text-base-400 hover:text-white transition-colors text-sm"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          {/* Standards & Specs */}
+          <div>
+            <div className="text-xs font-bold uppercase tracking-wider text-base-900 dark:text-white mb-3">
+              Standards
             </div>
+            <ul className="space-y-2 text-xs sm:text-sm text-base-500 dark:text-base-400">
+              <li>
+                <span className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  Bytecript v1
+                </span>
+              </li>
+              <li>
+                <span className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  Curve25519 / Ed25519
+                </span>
+              </li>
+              <li>
+                <span className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  UUIDv7 Identifiers
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-base-400 text-xs">
-          <div>Descript Identity Platform</div>
-          <div className="flex items-center gap-2">
-            <Cpu className="h-4 w-4" />
-            <span>Ed25519 Agent Identity & Python SDK</span>
+        <div className="pt-8 border-t border-base-200 dark:border-base-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-base-500 dark:text-base-400">
+          <div>&copy; {new Date().getFullYear()} Descript Identity Infrastructure. All rights reserved.</div>
+          <div className="flex items-center gap-4">
+            <span>Powered by Neon DB</span>
+            <span>&bull;</span>
+            <span>Client-Side Cryptography</span>
           </div>
         </div>
       </div>

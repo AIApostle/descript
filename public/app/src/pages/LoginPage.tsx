@@ -63,34 +63,36 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-base-950 flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-base-950 flex flex-col bg-grid-pattern">
       <Navigation />
 
-      <main className="flex-1 pt-24 pb-20">
+      <main className="flex-1 pt-28 sm:pt-36 pb-20">
         <div className="container-narrow">
           <div className="max-w-md mx-auto">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-base-600 dark:text-base-400 hover:text-base-900 dark:hover:text-white mb-10 group text-sm font-medium"
+              className="inline-flex items-center gap-2 text-base-600 dark:text-base-400 hover:text-base-900 dark:hover:text-white mb-8 group text-sm font-medium"
             >
               <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
               Back to home
             </Link>
 
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-descript-50 dark:bg-descript-950/60 text-descript-700 dark:text-descript-300 rounded-full text-xs font-medium uppercase tracking-wider mb-5">
-                <Fingerprint className="h-3 w-3" />
-                Sign In
-              </div>
+            <div className="double-bezel">
+              <div className="double-bezel-inner p-8">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-descript-50 dark:bg-descript-950/80 text-descript-700 dark:text-descript-300 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-descript-200/80 dark:border-descript-800/80">
+                    <Fingerprint className="h-3.5 w-3.5" />
+                    <span>Controller Console</span>
+                  </div>
 
-              <h1 className="text-3xl md:text-4xl font-semibold text-base-900 dark:text-white mb-3">
-                Welcome back
-              </h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-base-950 dark:text-white mb-2">
+                    Welcome back
+                  </h1>
 
-              <p className="text-base-600 dark:text-base-300 text-sm sm:text-base">
-                Sign in to your Descript account to manage agent identities and Bytecripts.
-              </p>
-            </div>
+                  <p className="text-xs sm:text-sm text-base-500">
+                    Sign in to manage your agent identities, keys, and Bytecript passports.
+                  </p>
+                </div>
 
             {submitError && (
               <div
@@ -176,6 +178,8 @@ export default function LoginPage() {
                 </Link>
               </p>
             </form>
+          </div>
+        </div>
 
             <div className="mt-10 p-5 bg-base-50 dark:bg-base-900 rounded-xl border border-base-200 dark:border-base-800">
               <div className="flex items-start gap-3.5">

@@ -88,10 +88,10 @@ export default function SignupPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-base-950 flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-base-950 flex flex-col bg-grid-pattern">
       <Navigation />
 
-      <main className="flex-1 pt-24 pb-20">
+      <main className="flex-1 pt-28 sm:pt-36 pb-20">
         <div className="container-narrow">
           <div className="max-w-4xl mx-auto">
             <Link
