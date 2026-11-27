@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+from .a2a import (
+    A2AHandshakeHello,
+    A2AHandshakeResponse,
+    DescriptA2A,
+)
+from .agent_auth import DescriptAgentAuth
 from .client import AsyncDescriptClient, DescriptClient
 from .crypto import (
     KeyPair,
@@ -37,10 +43,19 @@ from .models import (
     User,
     VerificationResult,
 )
+from .security import (
+    AgentClaims,
+    ChallengeDetails,
+    DescriptSecurity,
+    format_challenge_payload,
+)
 
 __all__ = [
+    "A2AHandshakeHello",
+    "A2AHandshakeResponse",
     "Agent",
     "AgentClaimResult",
+    "AgentClaims",
     "ApiKey",
     "AsyncDescriptClient",
     "AuditEvent",
@@ -51,11 +66,15 @@ __all__ = [
     "Bytecript",
     "BytecriptVerifyResult",
     "Challenge",
+    "ChallengeDetails",
     "ConflictError",
     "Credential",
     "CryptographicError",
+    "DescriptA2A",
+    "DescriptAgentAuth",
     "DescriptClient",
     "DescriptError",
+    "DescriptSecurity",
     "HealthStatus",
     "IssuerInfo",
     "KeyPair",
@@ -67,6 +86,7 @@ __all__ = [
     "ValidationError",
     "VerificationResult",
     "compute_fingerprint",
+    "format_challenge_payload",
     "format_fingerprint",
     "parse_public_key_bytes",
     "verify_bytecript_signature",
