@@ -81,7 +81,7 @@ export default function HeroSection() {
             </h1>
 
             <p className="text-base sm:text-lg text-base-600 dark:text-base-300 leading-relaxed max-w-xl mb-8">
-              Persistent UUIDv7 Agent IDs, client-side Ed25519 key custody, signed Bytecript passports,
+              Persistent UUIDv7 Agent IDs, server-provisioned Ed25519 key custody, signed Bytecript passports,
               and a native Python SDK. Built for zero-trust multi-agent ecosystems.
             </p>
 

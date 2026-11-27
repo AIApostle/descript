@@ -183,7 +183,41 @@ def sign_bytecript_payload(payload_without_signature: dict[str, Any], issuer_see
     return sig.hex()
 
 
+def generate_ed25519_keypair_dict() -> dict[str, str]:
+    """Generate a secure Ed25519 keypair on the server and export strings for provisioning."""
+    priv = Ed25519PrivateKey.generate()
+    pub = priv.public_key()
+    priv_raw = priv.private_bytes(
+        encoding=serialization.Encoding.Raw,
+        format=serialization.PrivateFormat.Raw,
+        encryption_algorithm=serialization.NoEncryption(),
+    )
+    pub_raw = pub.public_bytes(
+        encoding=serialization.Encoding.Raw,
+        format=serialization.PublicFormat.Raw,
+    )
+    pub_pem = pub.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo,
+    ).decode("ascii")
+    priv_pem = priv.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption(),
+    ).decode("ascii")
+
+    return {
+        "algorithm": "ed25519",
+        "publicKey": base64.b64encode(pub_raw).decode("ascii"),
+        "publicKeyPem": pub_pem,
+        "privateKeyBase64": base64.b64encode(priv_raw).decode("ascii"),
+        "privateKeyPem": priv_pem,
+        "fingerprint": public_key_fingerprint(pub_raw),
+    }
+
+
 def get_issuer_public_key_bytes(issuer_seed: bytes) -> bytes:
+
     priv = Ed25519PrivateKey.from_private_bytes(issuer_seed)
     return priv.public_key().public_bytes(
         encoding=serialization.Encoding.Raw,

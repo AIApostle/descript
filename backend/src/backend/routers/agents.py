@@ -11,6 +11,7 @@ from sqlalchemy.orm import selectinload
 from ..auth import AuthActor, get_current_actor
 from ..crypto import (
     CryptoValidationError,
+    generate_ed25519_keypair_dict,
     parse_ed25519_public_key,
     public_key_fingerprint,
     public_key_to_base64,
@@ -31,6 +32,7 @@ from ..schemas import (
     CredentialRevokeRequest,
     CredentialStandaloneCreateRequest,
     CredentialUpdateRequest,
+    ServerKeypairProvisionOut,
 )
 from ..services.bytecript import (
     build_bytecript,
@@ -160,6 +162,13 @@ async def list_agents(
 
     agents = (await db.execute(stmt)).scalars().all()
     return [serialize_agent(a, owner=actor.user) for a in agents]
+
+
+@router.post("/agents/generate-keypair", response_model=ServerKeypairProvisionOut)
+async def generate_server_keypair() -> ServerKeypairProvisionOut:
+    """Server-side generation of an Ed25519 keypair for developers to copy or bind."""
+    kp = generate_ed25519_keypair_dict()
+    return ServerKeypairProvisionOut.model_validate(kp)
 
 
 @router.post("/agents", response_model=AgentOut, status_code=status.HTTP_201_CREATED)

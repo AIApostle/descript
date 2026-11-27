@@ -106,7 +106,7 @@ export default function Footer() {
           <div className="flex items-center gap-4">
             <span>Zero-Trust Architecture</span>
             <span>&bull;</span>
-            <span>Client-Side Cryptography</span>
+            <span>Ed25519 Cryptography</span>
           </div>
         </div>
       </div>

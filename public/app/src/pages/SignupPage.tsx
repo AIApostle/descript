@@ -81,7 +81,7 @@ export default function SignupPage() {
 
   const benefits = [
     'Persistent global Agent IDs across Byte Networks',
-    'Client-side Ed25519 key generation & rotation',
+    'Server-provisioned Ed25519 key generation & rotation',
     'Signed Bytecript digital identity cards',
     'Official Python SDK for programmatic registration',
     'Challenge-response verification endpoints',

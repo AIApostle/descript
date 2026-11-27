@@ -73,6 +73,7 @@ def create_app() -> FastAPI:
         return JSONResponse(status_code=status_code, content=payload.model_dump(mode="json"))
 
     app.include_router(auth.router, prefix=settings.api_prefix)
+    app.include_router(auth.router)  # Fallback for unversioned /auth/signup & /auth/login
     app.include_router(networks.router, prefix=settings.api_prefix)
     app.include_router(agents.router, prefix=settings.api_prefix)
     app.include_router(verify.router, prefix=settings.api_prefix)

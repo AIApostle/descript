@@ -474,7 +474,14 @@ class AgentMessageOut(BaseModel):
     createdAt: datetime
 
 
-# Platform direct agent signup & login credentials
+class ServerKeypairProvisionOut(BaseModel):
+    algorithm: Literal["ed25519"] = "ed25519"
+    publicKey: str
+    publicKeyPem: str
+    privateKeyBase64: str
+    privateKeyPem: str
+    fingerprint: str
+
 class PlatformAgentSignupRequest(BaseModel):
     platformDomain: str
     platformName: str
