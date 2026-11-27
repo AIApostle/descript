@@ -16,7 +16,7 @@ import {
   Sun,
   X,
 } from 'lucide-react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -37,6 +37,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const { user, logout } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isNavActive = (to: string) => {
+    if (to.includes('?')) {
+      return location.pathname + location.search === to;
+    }
+    return location.pathname === to && (!location.search || location.search === '');
+  };
 
   const navItems = [
     { to: '/dashboard', label: 'Overview', icon: <LayoutDashboard className="h-4 w-4" /> },
@@ -83,23 +91,24 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </div>
 
       <nav className="flex-1 p-4 space-y-1.5" aria-label="Dashboard navigation">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            onClick={() => setSidebarOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-descript-50 text-descript-700 dark:bg-descript-950/60 dark:text-descript-300'
-                  : 'text-base-600 dark:text-base-300 hover:bg-base-100 dark:hover:bg-base-800 hover:text-base-900 dark:hover:text-white'
-              }`
-            }
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </NavLink>
-        ))}
+        {navItems.map((item) => {
+          const active = isNavActive(item.to);
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={() => setSidebarOpen(false)}
+              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                active
+                  ? 'bg-descript-50 text-descript-700 dark:bg-descript-950/80 dark:text-descript-300 font-semibold shadow-2xs'
+                  : 'text-base-600 dark:text-base-300 hover:bg-base-100 dark:hover:bg-base-800 hover:text-base-950 dark:hover:text-white'
+              }`}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
 
         <div className="pt-4 mt-4 border-t border-base-200 dark:border-base-800">
           <Link
