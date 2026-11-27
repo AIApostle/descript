@@ -154,6 +154,50 @@ export interface ApiKeyCreateResponse extends ApiKey {
   secret: string;
 }
 
+export interface Netprint {
+  id: string;
+  agentId: string;
+  agentName?: string | null;
+  platformName: string;
+  platformDomain: string;
+  action: string;
+  resource?: string | null;
+  status: string;
+  securityLevel: string;
+  ipAddress?: string | null;
+  payload: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface AgentMessage {
+  id: string;
+  senderAgentId: string;
+  senderAgentName?: string | null;
+  recipientAgentId: string;
+  recipientAgentName?: string | null;
+  messageType: string;
+  subject?: string | null;
+  content: string;
+  metadata: Record<string, unknown>;
+  signature: string;
+  status: string;
+  readAt?: string | null;
+  createdAt: string;
+}
+
+export interface PlatformPendingAuthSession {
+  authSessionId: string;
+  userCode: string;
+  platformName: string;
+  platformDomain: string;
+  requestedScopes: string[];
+  byteNetwork?: string | null;
+  agentId?: string | null;
+  status: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
 export interface HealthStatus {
   status: 'ok' | 'degraded';
   service: string;
@@ -165,3 +209,4 @@ export interface HealthStatus {
   timestamp: string;
   detail?: string | null;
 }
+

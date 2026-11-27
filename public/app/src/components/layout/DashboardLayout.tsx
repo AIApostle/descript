@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import {
+  Activity,
   Bot,
   Code2,
   Fingerprint,
+  Globe,
   LayoutDashboard,
   LogOut,
+  Mail,
   Menu,
   Moon,
   Plus,
@@ -36,11 +39,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const navigate = useNavigate();
 
   const navItems = [
-    { to: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" /> },
+    { to: '/dashboard', label: 'Agents Fleet', icon: <LayoutDashboard className="h-4 w-4" /> },
+    { to: '/dashboard?tab=netprints', label: 'Netprints (Footprints)', icon: <Globe className="h-4 w-4" /> },
+    { to: '/dashboard?tab=messages', label: 'Agent Messages', icon: <Mail className="h-4 w-4" /> },
+    { to: '/dashboard?tab=auth-sessions', label: 'Platform Sessions', icon: <Activity className="h-4 w-4" /> },
     { to: '/agents/new', label: 'Register Agent', icon: <Plus className="h-4 w-4" /> },
     { to: '/verify', label: 'Verify Agent', icon: <ShieldCheck className="h-4 w-4" /> },
-    { to: '/docs', label: 'Docs & Protocol Specs', icon: <Code2 className="h-4 w-4" /> },
-    { to: '/settings', label: 'Settings', icon: <Settings className="h-4 w-4" /> },
+    { to: '/docs', label: 'SDK & Protocol Docs', icon: <Code2 className="h-4 w-4" /> },
+    { to: '/settings', label: 'API Keys & Settings', icon: <Settings className="h-4 w-4" /> },
   ];
 
   const handleLogout = () => {
