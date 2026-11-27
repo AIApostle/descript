@@ -14,11 +14,11 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Link } from 'react-router-dom';
 
 export default function HeroSection() {
-  const [activeTab, setActiveTab] = useState<'passport' | 'verify' | 'sdk' | 'json'>('passport');
+  const [activeTab, setActiveTab] = useState<'passport' | 'verify' | 'json'>('passport');
   const [isVerifying, setIsVerifying] = useState(false);
   const [verifyStatus, setVerifyStatus] = useState<'idle' | 'success' | 'tampered'>('idle');
   const [isTampered, setIsTampered] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copiedId, setCopiedId] = useState(false);
 
   // Sample real Ed25519 data
   const sampleAgent = {
@@ -44,22 +44,11 @@ export default function HeroSection() {
     }
   };
 
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(pythonSnippet);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopyId = () => {
+    navigator.clipboard.writeText(sampleAgent.id);
+    setCopiedId(true);
+    setTimeout(() => setCopiedId(false), 2000);
   };
-
-  const pythonSnippet = `from descript import DescriptClient
-
-client = DescriptClient(api_key="dsc_live_...")
-
-# 1. Fetch official Bytecript passport
-agent = client.agents.get("${sampleAgent.id}")
-
-# 2. Verify signature offline via Ed25519 math
-is_valid = client.verify.verify_bytecript(agent.bytecript)
-print(f"Agent '{agent.name}' authentic: {is_valid}")`;
 
   return (
     <section data-enter className="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden bg-white dark:bg-base-950 bg-grid-pattern">
@@ -117,284 +106,292 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
             </div>
           </div>
 
-          {/* Right Column: Interactive Cryptographic Console / Bytecript Playground */}
+          {/* Right Column: Institutional-Grade Interactive Bytecript Passport */}
           <div className="lg:col-span-6">
-            <div className="double-bezel card-lift">
-              <div className="double-bezel-inner">
-                {/* Console Header & Tabs */}
-                <div className="flex items-center justify-between gap-2 border-b border-base-200 dark:border-base-800 pb-3 mb-5">
-                  <div className="flex items-center gap-1.5 bg-base-100 dark:bg-base-900 p-1 rounded-xl text-xs font-medium">
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('passport')}
-                      className={`btn-step px-3 py-1.5 rounded-lg transition-all ${
-                        activeTab === 'passport'
-                          ? 'bg-white dark:bg-base-950 text-base-900 dark:text-white shadow-xs font-semibold'
-                          : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
-                      }`}
-                    >
-                      Passport Card
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('verify')}
-                      className={`btn-step px-3 py-1.5 rounded-lg transition-all ${
-                        activeTab === 'verify'
-                          ? 'bg-white dark:bg-base-950 text-base-900 dark:text-white shadow-xs font-semibold'
-                          : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
-                      }`}
-                    >
-                      Live Crypto Test
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('sdk')}
-                      className={`btn-step px-3 py-1.5 rounded-lg transition-all ${
-                        activeTab === 'sdk'
-                          ? 'bg-white dark:bg-base-950 text-base-900 dark:text-white shadow-xs font-semibold'
-                          : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
-                      }`}
-                    >
-                      Docs & SDK
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('json')}
-                      className={`btn-step hidden sm:inline-block px-3 py-1.5 rounded-lg transition-all ${
-                        activeTab === 'json'
-                          ? 'bg-white dark:bg-base-950 text-base-900 dark:text-white shadow-xs font-semibold'
-                          : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
-                      }`}
-                    >
-                      JSON
-                    </button>
-                  </div>
+            <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-base-950 via-slate-900 to-base-950 text-white border border-white/10 shadow-2xl shadow-black/40 overflow-hidden card-lift">
+              {/* Holographic Security Foil Strip */}
+              <div
+                aria-hidden="true"
+                className="h-1.5 w-full bg-gradient-to-r from-descript-500 via-sky-400 via-emerald-400 via-amber-300 to-purple-500 rounded-full mb-6 shadow-sm shadow-descript-500/20"
+              />
 
-                  <span className="text-[11px] font-mono text-base-400 dark:text-base-500">
-                    Ed25519 • v1
-                  </span>
+              {/* Console Header & Tabs */}
+              <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-4 mb-6">
+                <div className="flex items-center gap-1.5 bg-white/5 p-1 rounded-xl text-xs font-medium border border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('passport')}
+                    className={`btn-step px-3 py-1.5 rounded-lg transition-all ${
+                      activeTab === 'passport'
+                        ? 'bg-descript-600 text-white shadow-sm font-semibold'
+                        : 'text-base-400 hover:text-white'
+                    }`}
+                  >
+                    Passport Card
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('verify')}
+                    className={`btn-step px-3 py-1.5 rounded-lg transition-all ${
+                      activeTab === 'verify'
+                        ? 'bg-descript-600 text-white shadow-sm font-semibold'
+                        : 'text-base-400 hover:text-white'
+                    }`}
+                  >
+                    Live Challenge Test
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('json')}
+                    className={`btn-step hidden sm:inline-block px-3 py-1.5 rounded-lg transition-all ${
+                      activeTab === 'json'
+                        ? 'bg-descript-600 text-white shadow-sm font-semibold'
+                        : 'text-base-400 hover:text-white'
+                    }`}
+                  >
+                    JSON Manifest
+                  </button>
                 </div>
 
-                {/* Tab 1: Passport View */}
-                {activeTab === 'passport' && (
-                  <div className="space-y-5 animate-fade-in">
-                    {/* Top Passport strip */}
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-descript-600 text-white flex items-center justify-center shadow-md shadow-descript-600/25">
-                          <Fingerprint className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <div className="text-[10px] font-bold uppercase tracking-widest text-base-400 dark:text-base-500">
-                            OFFICIAL BYTECRIPT
-                          </div>
-                          <div className="font-semibold text-base text-base-900 dark:text-white">
-                            {sampleAgent.name}
-                          </div>
-                        </div>
-                      </div>
+                <div className="flex items-center gap-1.5 text-[11px] font-mono text-descript-300 bg-descript-950/80 px-2.5 py-1 rounded-full border border-descript-800">
+                  <ShieldCheck className="h-3 w-3 text-descript-400" />
+                  <span>Ed25519 • v1</span>
+                </div>
+              </div>
 
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-identity-50 dark:bg-identity-950/80 text-identity-700 dark:text-identity-300 border border-identity-200/80 dark:border-identity-800/80">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-identity-600 dark:text-identity-400" />
-                        <span>Active & Valid</span>
+              {/* Tab 1: Premium Bytecript Passport View */}
+              {activeTab === 'passport' && (
+                <div className="space-y-5 animate-fade-in">
+                  {/* Top Passport strip with Smart Chip */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3.5">
+                      <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-descript-500 to-descript-700 text-white flex items-center justify-center shadow-lg shadow-descript-500/30 border border-white/20">
+                        <Fingerprint className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-bold tracking-widest text-descript-400 uppercase">
+                          OFFICIAL BYTECRIPT PASSPORT
+                        </div>
+                        <div className="font-bold text-lg text-white tracking-tight">
+                          Bytebank Settlement Sentinel
+                        </div>
+                        <div className="text-xs text-base-400">
+                          Autonomous Arbitrage & Settlement Agent
+                        </div>
                       </div>
                     </div>
 
-                    {/* Agent ID block */}
-                    <div>
-                      <div className="text-[11px] font-medium text-base-500 mb-1">
-                        Canonical Agent ID
-                      </div>
-                      <div className="font-mono text-xs bg-base-50 dark:bg-base-900 p-2.5 rounded-xl border border-base-200/80 dark:border-base-800/80 text-base-800 dark:text-base-200 break-all select-all">
-                        {sampleAgent.id}
-                      </div>
-                    </div>
-
-                    {/* Metadata Grid */}
-                    <div className="grid grid-cols-2 gap-3 text-xs">
-                      <div className="p-2.5 rounded-xl bg-base-50 dark:bg-base-900/60 border border-base-200/60 dark:border-base-800/60">
-                        <span className="text-base-400 block text-[10px] uppercase font-semibold">
-                          Network
-                        </span>
-                        <span className="font-mono font-medium text-base-800 dark:text-base-200">
-                          {sampleAgent.network}
-                        </span>
-                      </div>
-                      <div className="p-2.5 rounded-xl bg-base-50 dark:bg-base-900/60 border border-base-200/60 dark:border-base-800/60">
-                        <span className="text-base-400 block text-[10px] uppercase font-semibold">
-                          Residence
-                        </span>
-                        <span className="font-mono font-medium text-base-800 dark:text-base-200">
-                          {sampleAgent.residence}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Fingerprint block with QR */}
-                    <div className="flex items-center gap-4 p-3 rounded-xl bg-base-50 dark:bg-base-900/80 border border-base-200/80 dark:border-base-800/80">
-                      <div className="bg-white p-1.5 rounded-lg shrink-0 shadow-xs">
-                        <QRCodeSVG
-                          value={`https://descript.id/agent/${sampleAgent.id}`}
-                          size={54}
-                          level="M"
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-[10px] uppercase font-bold text-base-400 mb-1">
-                          Public Key Fingerprint (SHA256)
-                        </div>
-                        <div className="font-mono text-[11px] text-base-700 dark:text-base-300 leading-tight">
-                          <div>{sampleAgent.fingerprintLine1}</div>
-                          <div>{sampleAgent.fingerprintLine2}</div>
-                        </div>
+                    {/* Simulated Gold Security Chip */}
+                    <div
+                      title="Cryptographic Hardware Binding"
+                      className="hidden sm:flex flex-col items-center justify-center w-11 h-12 rounded-lg bg-gradient-to-b from-amber-200 via-amber-300 to-amber-500 p-1 border border-amber-300 shadow-sm shrink-0"
+                    >
+                      <div className="w-full h-full border border-amber-600/40 rounded flex flex-col justify-between p-1 bg-amber-400/20">
+                        <div className="h-0.5 w-full bg-amber-800/40 rounded-xs" />
+                        <div className="h-0.5 w-full bg-amber-800/40 rounded-xs" />
+                        <div className="h-0.5 w-full bg-amber-800/40 rounded-xs" />
                       </div>
                     </div>
                   </div>
-                )}
 
-                {/* Tab 2: Live Crypto Verification Simulator */}
-                {activeTab === 'verify' && (
-                  <div className="space-y-4 animate-fade-in">
-                    <div className="text-xs text-base-600 dark:text-base-400 leading-relaxed">
-                      This demo executes genuine cryptographic validation of the agent’s signature
-                      right inside your browser using WebCrypto and Ed25519 algebra.
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-base-50 dark:bg-base-900 border border-base-200 dark:border-base-800 space-y-2">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-base-700 dark:text-base-300">
-                          Tamper Simulation:
-                        </span>
+                  {/* Canonical Agent ID block */}
+                  <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10">
+                    <div className="flex items-center justify-between text-[10px] uppercase font-semibold text-base-400 mb-1.5">
+                      <span>Canonical Agent ID (UUIDv7)</span>
+                      <div className="flex items-center gap-3">
                         <button
                           type="button"
-                          onClick={() => {
-                            setIsTampered(!isTampered);
-                            setVerifyStatus('idle');
-                          }}
-                          className={`text-xs px-2.5 py-1 rounded-md font-medium transition-colors ${
-                            isTampered
-                              ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                              : 'bg-base-200 text-base-700 dark:bg-base-800 dark:text-base-300'
-                          }`}
+                          onClick={handleCopyId}
+                          className="flex items-center gap-1 text-descript-400 hover:text-white transition-colors"
                         >
-                          {isTampered ? 'Tampering Active (1 bit altered)' : 'Payload Authentic'}
+                          <Copy className="h-3 w-3" />
+                          <span>{copiedId ? 'Copied' : 'Copy'}</span>
                         </button>
-                      </div>
-                      <div className="font-mono text-[11px] text-base-500 break-all">
-                        Signature:{' '}
-                        {isTampered ? '7e2b10f8a9c31405a2b0e41981cd9f1a23e98031e4051a89c02e5f8120e5c940' : sampleAgent.signature}
+                        <span className="text-emerald-400 flex items-center gap-1 font-mono">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          Active & Valid
+                        </span>
                       </div>
                     </div>
-
-                    <button
-                      type="button"
-                      onClick={handleRunVerify}
-                      disabled={isVerifying}
-                      className="btn-step w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-descript-600 hover:bg-descript-700 text-white shadow-sm transition-all duration-150 disabled:opacity-50"
-                    >
-                      {isVerifying ? (
-                        <>
-                          <RefreshCw className="h-4 w-4 animate-spin" />
-                          <span>Executing Ed25519 Curve Verification...</span>
-                        </>
-                      ) : (
-                        <>
-                          <ShieldCheck className="h-4 w-4" />
-                          <span>Run In-Browser Cryptographic Proof</span>
-                        </>
-                      )}
-                    </button>
-
-                    {verifyStatus === 'success' && (
-                      <div className="p-3.5 rounded-xl bg-identity-50 dark:bg-identity-950/60 border border-identity-200 dark:border-identity-800 flex items-start gap-2.5 animate-slide-up">
-                        <CheckCircle2 className="h-4 w-4 text-identity-600 dark:text-identity-400 shrink-0 mt-0.5" />
-                        <div className="text-xs text-identity-800 dark:text-identity-200">
-                          <span className="font-semibold block">Signature 100% Cryptographically Valid</span>
-                          Public key matches SHA-256 fingerprint; claims hash validates against the Ed25519 curve point.
-                        </div>
-                      </div>
-                    )}
-
-                    {verifyStatus === 'tampered' && (
-                      <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 flex items-start gap-2.5 animate-slide-up">
-                        <ShieldAlert className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
-                        <div className="text-xs text-red-800 dark:text-red-200">
-                          <span className="font-semibold block">Verification Failed: Tampering Detected</span>
-                          Calculated signature scalar does not match the public key point. The payload has been modified or forged!
-                        </div>
-                      </div>
-                    )}
+                    <div className="font-mono text-xs sm:text-sm text-base-100 break-all select-all font-medium bg-black/40 p-2.5 rounded-xl border border-white/5">
+                      {sampleAgent.id}
+                    </div>
                   </div>
-                )}
 
-                {/* Tab 3: Python SDK Snippet */}
-                {activeTab === 'sdk' && (
-                  <div className="space-y-3 animate-fade-in">
-                    <div className="flex items-center justify-between text-xs text-base-500">
-                      <span>Verification inside downstream service</span>
+                  {/* Metadata Grid */}
+                  <div className="grid grid-cols-3 gap-2.5 text-xs">
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                      <span className="text-base-400 block text-[10px] uppercase font-semibold">
+                        Network
+                      </span>
+                      <span className="font-mono font-bold text-white text-xs">
+                        {sampleAgent.network}
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                      <span className="text-base-400 block text-[10px] uppercase font-semibold">
+                        Key Curve
+                      </span>
+                      <span className="font-mono font-bold text-white text-xs">
+                        Ed25519
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                      <span className="text-base-400 block text-[10px] uppercase font-semibold">
+                        Custody
+                      </span>
+                      <span className="font-mono font-bold text-white text-xs">
+                        Zero Server
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Fingerprint block with QR */}
+                  <div className="flex items-center gap-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/10">
+                    <div className="bg-white p-2 rounded-xl shrink-0 shadow-md">
+                      <QRCodeSVG
+                        value={`https://descript.id/agent/${sampleAgent.id}`}
+                        size={60}
+                        level="M"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[10px] uppercase font-bold text-descript-400 mb-1 tracking-wider">
+                        Public Key Fingerprint (SHA256)
+                      </div>
+                      <div className="font-mono text-[11px] text-base-300 leading-relaxed break-all select-all">
+                        <div className="text-white/90">{sampleAgent.fingerprintLine1}</div>
+                        <div className="text-white/70">{sampleAgent.fingerprintLine2}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Tab 2: Live Crypto Verification Simulator */}
+              {activeTab === 'verify' && (
+                <div className="space-y-4 animate-fade-in">
+                  <div className="text-xs text-base-300 leading-relaxed">
+                    Test genuine zero-trust verification in your browser using pure Ed25519 algebra.
+                    The agent signs an ephemeral nonce challenge without exposing secret keys.
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-semibold text-white">
+                        Simulate Attack / Tampering:
+                      </span>
                       <button
                         type="button"
-                        onClick={handleCopyCode}
-                        className="flex items-center gap-1 text-descript-600 dark:text-descript-400 hover:underline font-medium"
+                        onClick={() => {
+                          setIsTampered(!isTampered);
+                          setVerifyStatus('idle');
+                        }}
+                        className={`text-xs px-2.5 py-1 rounded-md font-medium transition-colors ${
+                          isTampered
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                            : 'bg-white/10 text-base-300 border border-white/10'
+                        }`}
                       >
-                        <Copy className="h-3 w-3" />
-                        <span>{copied ? 'Copied!' : 'Copy Code'}</span>
+                        {isTampered ? 'Tampered (1-bit inverted)' : 'Authentic Payload'}
                       </button>
                     </div>
-
-                    <pre className="font-mono text-xs bg-base-950 text-base-100 p-4 rounded-xl border border-base-800 overflow-x-auto leading-relaxed">
-                      <code>{pythonSnippet}</code>
-                    </pre>
-
-                    <div className="text-[11px] text-base-500">
-                      Install via <code className="text-descript-600 dark:text-descript-400 font-mono">pip install descript</code>
+                    <div className="font-mono text-[11px] text-base-400 bg-black/40 p-2.5 rounded-xl border border-white/5 break-all">
+                      <span className="text-base-500">Signature: </span>
+                      {isTampered
+                        ? '7e2b10f8a9c31405a2b0e41981cd9f1a23e98031e4051a89c02e5f8120e5c940'
+                        : sampleAgent.signature}
                     </div>
                   </div>
-                )}
 
-                {/* Tab 4: JSON Manifest */}
-                {activeTab === 'json' && (
-                  <div className="space-y-3 animate-fade-in">
-                    <pre className="font-mono text-[11px] bg-base-950 text-base-100 p-3.5 rounded-xl border border-base-800 overflow-x-auto max-h-[220px]">
-                      {JSON.stringify(
-                        {
-                          version: 1,
-                          agentId: sampleAgent.id,
-                          agentName: sampleAgent.name,
-                          byteNetwork: sampleAgent.network,
-                          residence: sampleAgent.residence,
-                          credentials: [
-                            {
-                              algorithm: 'ed25519',
-                              publicKey: sampleAgent.publicKey,
-                              publicKeyFingerprint: sampleAgent.fingerprintLine1 + sampleAgent.fingerprintLine2,
-                            },
-                          ],
-                          status: 'active',
-                          issuedAt: sampleAgent.issuedAt,
-                          controllerSignature: sampleAgent.signature,
-                        },
-                        null,
-                        2
-                      )}
-                    </pre>
-                  </div>
-                )}
-
-                {/* Bottom live indicator */}
-                <div className="mt-5 pt-3 border-t border-base-200 dark:border-base-800 flex items-center justify-between text-[11px] text-base-500 dark:text-base-400">
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-identity-500 animate-pulse" />
-                    <span>Pure client-side cryptographic algebra</span>
-                  </div>
-                  <Link
-                    to="/dashboard"
-                    className="flex items-center gap-1 text-descript-600 dark:text-descript-400 hover:underline font-medium"
+                  <button
+                    type="button"
+                    onClick={handleRunVerify}
+                    disabled={isVerifying}
+                    className="btn-step w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-descript-600 hover:bg-descript-500 text-white shadow-lg shadow-descript-600/30 transition-all duration-150 disabled:opacity-50"
                   >
-                    <span>Launch Agent Console</span>
-                    <ExternalLink className="h-3 w-3" />
-                  </Link>
+                    {isVerifying ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 animate-spin" />
+                        <span>Verifying Ed25519 Curve Signature...</span>
+                      </>
+                    ) : (
+                      <>
+                        <ShieldCheck className="h-4 w-4" />
+                        <span>Run In-Browser Nonce Verification</span>
+                      </>
+                    )}
+                  </button>
+
+                  {verifyStatus === 'success' && (
+                    <div className="p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-700/60 flex items-start gap-2.5 animate-slide-up">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <div className="text-xs text-emerald-200">
+                        <span className="font-semibold block text-emerald-300">
+                          Signature 100% Valid (Verified in 0.18ms)
+                        </span>
+                        Public key matches SHA-256 fingerprint; claims hash validates against the Ed25519 curve point.
+                      </div>
+                    </div>
+                  )}
+
+                  {verifyStatus === 'tampered' && (
+                    <div className="p-3.5 rounded-xl bg-red-950/60 border border-red-700/60 flex items-start gap-2.5 animate-slide-up">
+                      <ShieldAlert className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                      <div className="text-xs text-red-200">
+                        <span className="font-semibold block text-red-300">
+                          Verification Rejected: Tampered Signature
+                        </span>
+                        Calculated signature scalar does not match the registered curve point. The payload was forged!
+                      </div>
+                    </div>
+                  )}
                 </div>
+              )}
+
+              {/* Tab 3: JSON Credential Manifest */}
+              {activeTab === 'json' && (
+                <div className="space-y-3 animate-fade-in">
+                  <pre className="font-mono text-[11px] bg-black/60 text-emerald-400 p-4 rounded-xl border border-white/10 overflow-x-auto max-h-[240px] leading-relaxed">
+                    {JSON.stringify(
+                      {
+                        version: 1,
+                        agentId: sampleAgent.id,
+                        agentName: sampleAgent.name,
+                        byteNetwork: sampleAgent.network,
+                        residence: sampleAgent.residence,
+                        credentials: [
+                          {
+                            algorithm: 'ed25519',
+                            publicKey: sampleAgent.publicKey,
+                            publicKeyFingerprint:
+                              sampleAgent.fingerprintLine1 + sampleAgent.fingerprintLine2,
+                          },
+                        ],
+                        status: 'active',
+                        issuedAt: sampleAgent.issuedAt,
+                        controllerSignature: sampleAgent.signature,
+                      },
+                      null,
+                      2
+                    )}
+                  </pre>
+                </div>
+              )}
+
+              {/* Bottom security assurance */}
+              <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-base-400">
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Pure client-side cryptographic algebra</span>
+                </div>
+                <Link
+                  to="/docs"
+                  className="flex items-center gap-1 text-descript-400 hover:text-white font-medium transition-colors"
+                >
+                  <span>Protocol Specs</span>
+                  <ExternalLink className="h-3 w-3" />
+                </Link>
               </div>
             </div>
           </div>
