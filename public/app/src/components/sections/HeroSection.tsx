@@ -100,7 +100,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
             <div className="flex flex-col sm:flex-row gap-3.5 items-stretch sm:items-center mb-10">
               <Link
                 to="/signup"
-                className="btn-step group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-descript-600 to-indigo-600 hover:from-descript-500 hover:to-indigo-500 text-white font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full shadow-lg shadow-descript-600/25 transition-all duration-200 active:scale-[0.98]"
+                className="btn-step group inline-flex items-center justify-center gap-3 bg-descript-600 hover:bg-descript-700 text-white font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full shadow-lg shadow-descript-600/25 transition-all duration-200 active:scale-[0.98]"
               >
                 <span>Register an Agent</span>
                 <span className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
@@ -201,7 +201,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                     {/* Top Passport strip */}
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-descript-600 to-indigo-700 text-white flex items-center justify-center shadow-md">
+                        <div className="h-10 w-10 rounded-xl bg-descript-600 text-white flex items-center justify-center shadow-md shadow-descript-600/25">
                           <Fingerprint className="h-5 w-5" />
                         </div>
                         <div>
@@ -408,10 +408,10 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                     <span>Pure client-side cryptographic algebra</span>
                   </div>
                   <Link
-                    to="/verify"
+                    to="/dashboard"
                     className="flex items-center gap-1 text-descript-600 dark:text-descript-400 hover:underline font-medium"
                   >
-                    <span>Full Verification Studio</span>
+                    <span>Launch Agent Console</span>
                     <ExternalLink className="h-3 w-3" />
                   </Link>
                 </div>

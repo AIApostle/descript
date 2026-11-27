@@ -102,6 +102,13 @@ print(f"Verified {agent.name}: {is_valid}")`;
       subtitle="Manage persistent identities, client-side Ed25519 key bindings, and Bytecript cards."
       actions={
         <div className="flex items-center gap-2">
+          <Link
+            to="/verify"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-descript-200 dark:border-descript-800 bg-descript-50 dark:bg-descript-950/60 text-xs font-semibold text-descript-700 dark:text-descript-300 hover:bg-descript-100 dark:hover:bg-descript-900 transition-colors"
+          >
+            <ShieldCheck className="h-3.5 w-3.5 text-descript-600 dark:text-descript-400" />
+            <span>Verify Agent</span>
+          </Link>
           <Button
             variant="outline"
             size="sm"

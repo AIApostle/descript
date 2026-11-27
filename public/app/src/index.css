@@ -45,7 +45,7 @@
 @layer components {
   /* High-end typography & gradient */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-descript-600 via-trust-600 to-identity-600 dark:from-descript-400 dark:via-trust-400 dark:to-identity-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-descript-600 via-descript-500 to-indigo-500 dark:from-descript-400 dark:via-descript-300 dark:to-indigo-300;
   }
 
   .text-gradient-subtle {

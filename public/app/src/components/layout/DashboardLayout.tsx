@@ -38,7 +38,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const navItems = [
     { to: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" /> },
     { to: '/agents/new', label: 'Register Agent', icon: <Plus className="h-4 w-4" /> },
-    { to: '/verify', label: 'Verify Identity', icon: <ShieldCheck className="h-4 w-4" /> },
+    { to: '/verify', label: 'Verify Agent', icon: <ShieldCheck className="h-4 w-4" /> },
     { to: '/developers', label: 'Python SDK & Keys', icon: <Code2 className="h-4 w-4" /> },
     { to: '/settings', label: 'Settings', icon: <Settings className="h-4 w-4" /> },
   ];
@@ -52,10 +52,19 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     <div className="flex flex-col h-full bg-white dark:bg-base-900 border-r border-base-200 dark:border-base-800">
       <div className="h-16 px-5 flex items-center justify-between border-b border-base-200 dark:border-base-800">
         <Link to="/" className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-lg bg-descript-600 text-white flex items-center justify-center">
+          <div className="h-8 w-8 rounded-full bg-descript-600 text-white flex items-center justify-center shadow-md shadow-descript-600/25">
             <Fingerprint className="h-4 w-4" />
           </div>
-          <span className="font-semibold text-lg text-base-900 dark:text-white">Descript</span>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-lg text-base-900 dark:text-white">Descript</span>
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80">
+              <span className="status-beacon">
+                <span className="status-beacon-ping bg-emerald-400" />
+                <span className="status-beacon-dot bg-emerald-500" />
+              </span>
+              Neon Active
+            </span>
+          </div>
         </Link>
         <button
           type="button"
@@ -161,11 +170,20 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <Menu className="h-5 w-5" />
             </button>
             <div className="min-w-0">
-              {title && (
-                <h1 className="text-lg font-semibold text-base-900 dark:text-white truncate">
-                  {title}
-                </h1>
-              )}
+              <div className="flex items-center gap-2.5">
+                {title && (
+                  <h1 className="text-lg font-semibold text-base-900 dark:text-white truncate">
+                    {title}
+                  </h1>
+                )}
+                <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80">
+                  <span className="status-beacon">
+                    <span className="status-beacon-ping bg-emerald-400" />
+                    <span className="status-beacon-dot bg-emerald-500" />
+                  </span>
+                  Neon Active
+                </span>
+              </div>
               {subtitle && (
                 <p className="text-xs text-base-500 dark:text-base-400 truncate hidden sm:block">
                   {subtitle}

@@ -147,7 +147,7 @@ print(f"Agent {agent.name} verified: {is_valid}")`;
           {/* Header */}
           <div className="flex flex-wrap items-start justify-between gap-4 mb-6 pt-1">
             <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-descript-600 to-indigo-700 text-white flex items-center justify-center shadow-md shadow-descript-600/20">
+              <div className="h-11 w-11 rounded-xl bg-descript-600 text-white flex items-center justify-center shadow-md shadow-descript-600/25">
                 <Fingerprint className="h-6 w-6" />
               </div>
               <div>

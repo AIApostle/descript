@@ -96,11 +96,11 @@ export default function ProblemSection() {
             <div className="double-bezel-inner h-full flex flex-col justify-between border-descript-200/80 dark:border-descript-800/80">
               <div>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="h-10 w-10 rounded-xl bg-identity-100 dark:bg-identity-950/80 text-identity-600 dark:text-identity-400 flex items-center justify-center">
+                  <div className="h-10 w-10 rounded-xl bg-descript-100 dark:bg-descript-950/80 text-descript-600 dark:text-descript-400 flex items-center justify-center">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-identity-600 dark:text-identity-400">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-descript-600 dark:text-descript-400">
                       Descript Architecture
                     </span>
                     <h3 className="text-xl font-bold text-base-900 dark:text-white">
@@ -111,8 +111,8 @@ export default function ProblemSection() {
 
                 <div className="space-y-4 mb-6">
                   {failureModes.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-identity-50/30 dark:bg-identity-950/20 border border-identity-200/40 dark:border-identity-800/40">
-                      <CheckCircle2 className="h-4 w-4 text-identity-600 dark:text-identity-400 shrink-0 mt-0.5" />
+                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-descript-50/60 dark:bg-descript-950/20 border border-descript-200/50 dark:border-descript-800/40">
+                      <CheckCircle2 className="h-4 w-4 text-descript-600 dark:text-descript-400 shrink-0 mt-0.5" />
                       <div>
                         <div className="text-xs font-semibold text-base-900 dark:text-base-200 mb-0.5">
                           {item.title}
@@ -126,8 +126,8 @@ export default function ProblemSection() {
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-identity-50 dark:bg-identity-950/50 border border-identity-200/80 dark:border-identity-800/80 text-xs text-identity-800 dark:text-identity-200 font-medium flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-identity-500 animate-pulse" />
+              <div className="p-3.5 rounded-xl bg-descript-50 dark:bg-descript-950/50 border border-descript-200/80 dark:border-descript-800/80 text-xs text-descript-800 dark:text-descript-200 font-medium flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-descript-500 animate-pulse" />
                 <span>Mathematical trust verifiable offline or via real-time challenge nonces.</span>
               </div>
             </div>

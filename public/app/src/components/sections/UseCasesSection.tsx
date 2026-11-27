@@ -46,7 +46,7 @@ export default function UseCasesSection() {
     <section id="use-cases" className="py-24 sm:py-32 bg-white dark:bg-base-950 relative">
       <div className="container-wide">
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-identity-50 dark:bg-identity-950/80 text-identity-700 dark:text-identity-300 border border-identity-200/80 dark:border-identity-800/80 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-descript-50 dark:bg-descript-950/80 text-descript-700 dark:text-descript-300 border border-descript-200/80 dark:border-descript-800/80 mb-4">
             <Bot className="h-3.5 w-3.5" />
             <span>Real-World Production Scenarios</span>
           </div>

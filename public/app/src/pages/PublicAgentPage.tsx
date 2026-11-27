@@ -15,12 +15,15 @@ import { BytecriptCard } from '../components/bytecript/BytecriptCard';
 import Footer from '../components/layout/Footer';
 import Navigation from '../components/layout/Navigation';
 import { Button } from '../components/ui/Button';
+import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { useAuth } from '../context/AuthContext';
 import { agentService, verifyService } from '../services/agentService';
 import type { Agent, BytecriptVerifyResult } from '../types/agent';
 
 export default function PublicAgentPage() {
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const [activeTab, setActiveTab] = useState<'resolve' | 'json' | 'challenge'>('resolve');
   const [lookupId, setLookupId] = useState(id || '');
@@ -98,11 +101,8 @@ export default function PublicAgentPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-white dark:bg-base-950 flex flex-col bg-grid-pattern">
-      <Navigation />
-
-      <main className="flex-1 pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl w-full mx-auto space-y-10">
+  const content = (
+    <div className="space-y-10">
         {/* Studio Header */}
         <div className="text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-descript-50 dark:bg-descript-950/80 text-descript-700 dark:text-descript-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-descript-200/80 dark:border-descript-800/80">
@@ -345,8 +345,26 @@ export default function PublicAgentPage() {
             </div>
           </div>
         )}
-      </main>
+      </div>
+    );
 
+  if (isAuthenticated) {
+    return (
+      <DashboardLayout
+        title="Verify Agent"
+        subtitle="Universal verification studio: resolve identities, inspect signed Bytecript passports, and run offline Ed25519 proofs."
+      >
+        <div className="py-2">{content}</div>
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-base-950 flex flex-col bg-grid-pattern">
+      <Navigation />
+      <main className="flex-1 pt-28 sm:pt-36 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl w-full mx-auto">
+        {content}
+      </main>
       <Footer />
     </div>
   );

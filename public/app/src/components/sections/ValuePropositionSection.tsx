@@ -19,7 +19,7 @@ export default function ValuePropositionSection() {
         'Scoped Byte Network residency (e.g. kiroween)',
         'Full lifecycle state machine (active, suspended, revoked)',
       ],
-      glow: 'from-descript-500/20 to-indigo-500/0',
+      glow: 'from-descript-500/20 to-descript-500/0',
     },
     {
       icon: <KeyRound className="h-6 w-6" />,
@@ -32,7 +32,7 @@ export default function ValuePropositionSection() {
         'SHA-256 public key fingerprinting',
         'Tamper-evident signed Bytecript passport issuance',
       ],
-      glow: 'from-trust-500/20 to-blue-500/0',
+      glow: 'from-descript-500/20 to-descript-500/0',
     },
     {
       icon: <Cpu className="h-6 w-6" />,
@@ -45,7 +45,7 @@ export default function ValuePropositionSection() {
         'Offline & online Bytecript verification methods',
         'Interactive CLI for keygen, lookup, and health checks',
       ],
-      glow: 'from-identity-500/20 to-emerald-500/0',
+      glow: 'from-descript-500/20 to-descript-500/0',
     },
   ];
 
@@ -97,7 +97,7 @@ export default function ValuePropositionSection() {
                 <div className="space-y-3 pt-4 border-t border-base-200/80 dark:border-base-800/80">
                   {pillar.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-2.5 text-xs text-base-700 dark:text-base-200">
-                      <CheckCircle className="h-4 w-4 text-identity-600 dark:text-identity-400 shrink-0 mt-0.5" />
+                      <CheckCircle className="h-4 w-4 text-descript-600 dark:text-descript-400 shrink-0 mt-0.5" />
                       <span className="leading-snug">{feature}</span>
                     </div>
                   ))}
@@ -126,7 +126,7 @@ export default function ValuePropositionSection() {
             <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <div className="px-4 py-2.5 rounded-xl bg-base-50 dark:bg-base-900 border border-base-200 dark:border-base-800 text-center">
                 <div className="text-xs text-base-400 font-medium">Offline Latency</div>
-                <div className="text-base font-bold font-mono text-identity-600 dark:text-identity-400">
+                <div className="text-base font-bold font-mono text-descript-600 dark:text-descript-400">
                   &lt; 0.2ms
                 </div>
               </div>

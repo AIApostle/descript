@@ -30,11 +30,6 @@ export default function Footer() {
             </div>
             <ul className="space-y-2 text-xs sm:text-sm text-base-500 dark:text-base-400">
               <li>
-                <Link to="/verify" className="hover:text-base-900 dark:hover:text-white transition-colors">
-                  Verify Agent
-                </Link>
-              </li>
-              <li>
                 <Link to="/dashboard" className="hover:text-base-900 dark:hover:text-white transition-colors">
                   Agent Console
                 </Link>
@@ -42,6 +37,11 @@ export default function Footer() {
               <li>
                 <Link to="/agents/new" className="hover:text-base-900 dark:hover:text-white transition-colors">
                   Register Agent
+                </Link>
+              </li>
+              <li>
+                <Link to="/developers" className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  API Keys & Health
                 </Link>
               </li>
             </ul>

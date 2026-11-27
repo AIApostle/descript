@@ -19,9 +19,10 @@ export default function Navigation() {
 
   const navItems = [
     { label: 'How It Works', to: '/#how-it-works', isHash: true },
-    { label: 'Verify Agent', to: '/verify', isHash: false },
+    { label: 'Architecture', to: '/#value', isHash: true },
+    { label: 'Use Cases', to: '/#use-cases', isHash: true },
     { label: 'Python SDK', to: '/docs', isHash: false },
-    { label: 'Protocol Specs', to: '/developers', isHash: false },
+    { label: 'Developers', to: '/developers', isHash: false },
   ];
 
   const isActive = (path: string) => {
@@ -40,7 +41,7 @@ export default function Navigation() {
           to="/"
           className="group flex items-center gap-2.5 focus-visible:ring-2 focus-visible:ring-descript-500 rounded-full pr-2"
         >
-          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-descript-600 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-descript-600/20 group-hover:scale-105 transition-transform duration-200">
+          <div className="h-8 w-8 rounded-full bg-descript-600 text-white flex items-center justify-center shadow-md shadow-descript-600/25 group-hover:scale-105 transition-transform duration-200">
             <Fingerprint className="h-4 w-4" />
           </div>
           <div className="flex items-center gap-2">
@@ -124,7 +125,7 @@ export default function Navigation() {
               </Link>
               <Link
                 to="/signup"
-                className="btn-step group inline-flex items-center gap-2 bg-gradient-to-r from-descript-600 to-indigo-600 hover:from-descript-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-full shadow-sm shadow-descript-600/30 transition-all duration-150 active:scale-[0.98]"
+                className="btn-step group inline-flex items-center gap-2 bg-descript-600 hover:bg-descript-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-full shadow-sm shadow-descript-600/25 transition-all duration-150 active:scale-[0.98]"
               >
                 <span>Register Agent</span>
                 <span className="h-5 w-5 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">

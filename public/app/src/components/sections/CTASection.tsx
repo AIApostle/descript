@@ -57,7 +57,7 @@ export default function CTASection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <Link
               to="/signup"
-              className="btn-step group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-descript-500 to-indigo-500 hover:from-descript-400 hover:to-indigo-400 text-white font-semibold text-base px-8 py-4 rounded-full shadow-lg shadow-descript-500/25 transition-all duration-200 active:scale-[0.98]"
+              className="btn-step group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-descript-600 hover:bg-descript-700 text-white font-semibold text-base px-8 py-4 rounded-full shadow-lg shadow-descript-600/25 transition-all duration-200 active:scale-[0.98]"
             >
               <span>Get Started Now</span>
               <span className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
@@ -66,11 +66,11 @@ export default function CTASection() {
             </Link>
 
             <Link
-              to="/verify"
+              to="/docs"
               className="btn-step w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-semibold text-base px-7 py-4 rounded-full border border-white/10 transition-all duration-200"
             >
               <Terminal className="h-4 w-4 text-descript-400" />
-              <span>Verify Any Agent Online</span>
+              <span>Explore Python SDK</span>
             </Link>
           </div>
 
