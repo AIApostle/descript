@@ -133,7 +133,10 @@ async def init_db() -> None:
     from . import models  # noqa: F401
 
     settings = get_settings()
-    db_dir = Path(__file__).resolve().parents[3] / "db"
+    backend_root = Path(__file__).resolve().parents[2]
+    db_dir = backend_root / "db"
+    if not db_dir.is_dir():
+        db_dir = backend_root.parent / "db"
     if settings.is_postgres and db_dir.is_dir():
         # Execute modular SQL scripts from db/ using unpooled direct connection
         unpooled_engine, _ = create_engine_and_session(settings.normalized_database_url_unpooled)
