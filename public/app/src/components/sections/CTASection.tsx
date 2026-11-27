@@ -1,17 +1,27 @@
-import { ArrowRight, CheckCircle2, ShieldCheck, Terminal } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Check, CheckCircle2, Copy, ShieldCheck, Terminal } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function CTASection() {
+  const [copied, setCopied] = useState(false);
+  const installCommand = 'pip install descript';
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(installCommand);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <section className="py-24 sm:py-32 relative overflow-hidden bg-base-950 text-white">
       {/* Background ambient lighting */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 right-1/4 w-[600px] h-[400px] ambient-glow-indigo blur-3xl opacity-50"
+        className="pointer-events-none absolute -top-40 right-1/4 w-[600px] h-[400px] ambient-glow-indigo blur-3xl opacity-35"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 left-1/4 w-[500px] h-[350px] ambient-glow-emerald blur-3xl opacity-30"
+        className="pointer-events-none absolute -bottom-40 left-1/4 w-[500px] h-[350px] ambient-glow-emerald blur-3xl opacity-20"
       />
 
       <div className="container-wide relative z-10">
@@ -25,15 +35,29 @@ export default function CTASection() {
             Deploy your first verifiable agent in under two minutes
           </h2>
 
-          <p className="text-base sm:text-lg text-base-300 leading-relaxed max-w-2xl mx-auto mb-10">
+          <p className="text-base sm:text-lg text-base-300 leading-relaxed max-w-2xl mx-auto mb-8">
             Generate Ed25519 keys, mint a persistent Bytecript identity passport, and start verifying
             cross-service interactions using the Python SDK.
           </p>
 
+          {/* Quick CLI Install Pill */}
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-black/50 border border-white/10 font-mono text-xs text-base-300 mb-10 shadow-inner">
+            <Terminal className="h-3.5 w-3.5 text-descript-400 shrink-0" />
+            <span className="text-white select-all">{installCommand}</span>
+            <button
+              type="button"
+              onClick={handleCopy}
+              aria-label="Copy install command"
+              className="btn-step p-1 rounded hover:bg-white/10 text-base-400 hover:text-white transition-colors"
+            >
+              {copied ? <Check className="h-3.5 w-3.5 text-identity-400" /> : <Copy className="h-3.5 w-3.5" />}
+            </button>
+          </div>
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <Link
               to="/signup"
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-descript-500 to-indigo-500 hover:from-descript-400 hover:to-indigo-400 text-white font-semibold text-base px-8 py-4 rounded-full shadow-lg shadow-descript-500/25 transition-all duration-200 active:scale-[0.98]"
+              className="btn-step group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-descript-500 to-indigo-500 hover:from-descript-400 hover:to-indigo-400 text-white font-semibold text-base px-8 py-4 rounded-full shadow-lg shadow-descript-500/25 transition-all duration-200 active:scale-[0.98]"
             >
               <span>Get Started Now</span>
               <span className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
@@ -43,7 +67,7 @@ export default function CTASection() {
 
             <Link
               to="/verify"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-semibold text-base px-7 py-4 rounded-full border border-white/10 transition-all duration-200"
+              className="btn-step w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-semibold text-base px-7 py-4 rounded-full border border-white/10 transition-all duration-200"
             >
               <Terminal className="h-4 w-4 text-descript-400" />
               <span>Verify Any Agent Online</span>

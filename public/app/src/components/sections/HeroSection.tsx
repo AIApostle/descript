@@ -62,15 +62,15 @@ is_valid = client.verify.verify_bytecript(agent.bytecript)
 print(f"Agent '{agent.name}' authentic: {is_valid}")`;
 
   return (
-    <section className="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden bg-white dark:bg-base-950 bg-grid-pattern">
+    <section data-enter className="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden bg-white dark:bg-base-950 bg-grid-pattern">
       {/* Ambient background glows */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[450px] ambient-glow-indigo blur-3xl opacity-60 dark:opacity-40"
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[450px] ambient-glow-indigo blur-3xl opacity-35 dark:opacity-25"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 right-0 w-[500px] h-[400px] ambient-glow-emerald blur-3xl opacity-30 dark:opacity-20"
+        className="pointer-events-none absolute top-1/2 right-0 w-[500px] h-[400px] ambient-glow-emerald blur-3xl opacity-20 dark:opacity-15"
       />
 
       <div className="container-wide relative z-10">
@@ -100,7 +100,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
             <div className="flex flex-col sm:flex-row gap-3.5 items-stretch sm:items-center mb-10">
               <Link
                 to="/signup"
-                className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-descript-600 to-indigo-600 hover:from-descript-500 hover:to-indigo-500 text-white font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full shadow-lg shadow-descript-600/25 transition-all duration-200 active:scale-[0.98]"
+                className="btn-step group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-descript-600 to-indigo-600 hover:from-descript-500 hover:to-indigo-500 text-white font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full shadow-lg shadow-descript-600/25 transition-all duration-200 active:scale-[0.98]"
               >
                 <span>Register an Agent</span>
                 <span className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
@@ -109,7 +109,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
               </Link>
               <Link
                 to="/docs"
-                className="inline-flex items-center justify-center gap-2 bg-base-100/80 dark:bg-base-900/80 hover:bg-base-200 dark:hover:bg-base-800 text-base-800 dark:text-base-100 font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full border border-base-200 dark:border-base-800 transition-all duration-200"
+                className="btn-step inline-flex items-center justify-center gap-2 bg-base-100/80 dark:bg-base-900/80 hover:bg-base-200 dark:hover:bg-base-800 text-base-800 dark:text-base-100 font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full border border-base-200 dark:border-base-800 transition-all duration-200"
               >
                 <Terminal className="h-4 w-4 text-descript-600 dark:text-descript-400" />
                 <span>Explore Python SDK</span>
@@ -118,19 +118,19 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
 
             {/* Key Specs Pills */}
             <div className="pt-6 border-t border-base-200/80 dark:border-base-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-base-600 dark:text-base-400">
-              <div>
+              <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
                 <span className="font-semibold text-base-900 dark:text-white block">Curve25519</span>
                 <span>Pure Ed25519 Keys</span>
               </div>
-              <div>
+              <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
                 <span className="font-semibold text-base-900 dark:text-white block">Zero Custody</span>
                 <span>Private keys stay local</span>
               </div>
-              <div>
+              <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
                 <span className="font-semibold text-base-900 dark:text-white block">Neon Postgres</span>
                 <span>Multi-tenant pooling</span>
               </div>
-              <div>
+              <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
                 <span className="font-semibold text-base-900 dark:text-white block">Python 3.11+</span>
                 <span>Async & Sync SDK</span>
               </div>
@@ -139,7 +139,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
 
           {/* Right Column: Interactive Cryptographic Console / Bytecript Playground */}
           <div className="lg:col-span-6">
-            <div className="double-bezel">
+            <div className="double-bezel card-lift">
               <div className="double-bezel-inner">
                 {/* Console Header & Tabs */}
                 <div className="flex items-center justify-between gap-2 border-b border-base-200 dark:border-base-800 pb-3 mb-5">
@@ -147,7 +147,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                     <button
                       type="button"
                       onClick={() => setActiveTab('passport')}
-                      className={`px-3 py-1.5 rounded-lg transition-all ${
+                      className={`btn-step px-3 py-1.5 rounded-lg transition-all ${
                         activeTab === 'passport'
                           ? 'bg-white dark:bg-base-950 text-base-900 dark:text-white shadow-xs font-semibold'
                           : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
@@ -158,7 +158,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                     <button
                       type="button"
                       onClick={() => setActiveTab('verify')}
-                      className={`px-3 py-1.5 rounded-lg transition-all ${
+                      className={`btn-step px-3 py-1.5 rounded-lg transition-all ${
                         activeTab === 'verify'
                           ? 'bg-white dark:bg-base-950 text-base-900 dark:text-white shadow-xs font-semibold'
                           : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
@@ -169,7 +169,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                     <button
                       type="button"
                       onClick={() => setActiveTab('sdk')}
-                      className={`px-3 py-1.5 rounded-lg transition-all ${
+                      className={`btn-step px-3 py-1.5 rounded-lg transition-all ${
                         activeTab === 'sdk'
                           ? 'bg-white dark:bg-base-950 text-base-900 dark:text-white shadow-xs font-semibold'
                           : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
@@ -180,7 +180,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                     <button
                       type="button"
                       onClick={() => setActiveTab('json')}
-                      className={`hidden sm:inline-block px-3 py-1.5 rounded-lg transition-all ${
+                      className={`btn-step hidden sm:inline-block px-3 py-1.5 rounded-lg transition-all ${
                         activeTab === 'json'
                           ? 'bg-white dark:bg-base-950 text-base-900 dark:text-white shadow-xs font-semibold'
                           : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
@@ -310,7 +310,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                       type="button"
                       onClick={handleRunVerify}
                       disabled={isVerifying}
-                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-descript-600 hover:bg-descript-700 text-white shadow-sm transition-all duration-150 disabled:opacity-50"
+                      className="btn-step w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-descript-600 hover:bg-descript-700 text-white shadow-sm transition-all duration-150 disabled:opacity-50"
                     >
                       {isVerifying ? (
                         <>

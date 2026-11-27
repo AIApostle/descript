@@ -51,7 +51,7 @@ export default function ProblemSection() {
         {/* Comparison Bento Grid */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {/* Card 1: Traditional Fragile State */}
-          <div className="double-bezel">
+          <div className="double-bezel card-lift">
             <div className="double-bezel-inner h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-6">
@@ -92,7 +92,7 @@ export default function ProblemSection() {
           </div>
 
           {/* Card 2: Descript Architecture */}
-          <div className="double-bezel">
+          <div className="double-bezel card-lift">
             <div className="double-bezel-inner h-full flex flex-col justify-between border-descript-200/80 dark:border-descript-800/80">
               <div>
                 <div className="flex items-center gap-3 mb-6">

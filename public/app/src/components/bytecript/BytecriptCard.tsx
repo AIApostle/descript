@@ -133,10 +133,10 @@ print(f"Agent {agent.name} verified: {is_valid}")`;
 
   return (
     <>
-      <div className="double-bezel w-full max-w-[660px] mx-auto animate-fade-in">
+      <div className="double-bezel card-lift w-full max-w-[660px] mx-auto animate-fade-in">
         <section
           aria-label="Bytecript Digital Identity Card"
-          className="bytecript-card double-bezel-inner relative overflow-hidden"
+          className="bytecript-card double-bezel-inner relative overflow-hidden guilloche-pattern"
         >
           {/* Holographic Security Foil Strip */}
           <div
@@ -286,7 +286,7 @@ print(f"Agent {agent.name} verified: {is_valid}")`;
               type="button"
               onClick={handleTestVerify}
               disabled={isVerifying}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-descript-50 dark:bg-descript-950/80 text-descript-700 dark:text-descript-300 border border-descript-200/80 dark:border-descript-800/80 hover:bg-descript-100 transition-colors disabled:opacity-50"
+              className="btn-step inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-descript-50 dark:bg-descript-950/80 text-descript-700 dark:text-descript-300 border border-descript-200/80 dark:border-descript-800/80 hover:bg-descript-100 transition-colors disabled:opacity-50"
             >
               {isVerifying ? (
                 <RefreshCw className="h-3.5 w-3.5 animate-spin" />
@@ -299,7 +299,7 @@ print(f"Agent {agent.name} verified: {is_valid}")`;
             <button
               type="button"
               onClick={() => setShowSdkModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-base-100 dark:bg-base-900 text-base-700 dark:text-base-300 border border-base-200 dark:border-base-800 hover:bg-base-200/60 dark:hover:bg-base-800 transition-colors"
+              className="btn-step inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-base-100 dark:bg-base-900 text-base-700 dark:text-base-300 border border-base-200 dark:border-base-800 hover:bg-base-200/60 dark:hover:bg-base-800 transition-colors"
             >
               <Code2 className="h-3.5 w-3.5" />
               <span>Python SDK</span>
@@ -308,7 +308,7 @@ print(f"Agent {agent.name} verified: {is_valid}")`;
             <button
               type="button"
               onClick={() => setShowJsonModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-base-100 dark:bg-base-900 text-base-700 dark:text-base-300 border border-base-200 dark:border-base-800 hover:bg-base-200/60 dark:hover:bg-base-800 transition-colors"
+              className="btn-step inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-base-100 dark:bg-base-900 text-base-700 dark:text-base-300 border border-base-200 dark:border-base-800 hover:bg-base-200/60 dark:hover:bg-base-800 transition-colors"
             >
               <FileCode2 className="h-3.5 w-3.5" />
               <span>Signed Manifest</span>

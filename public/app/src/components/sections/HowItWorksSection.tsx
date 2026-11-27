@@ -68,7 +68,7 @@ export default function HowItWorksSection() {
         {/* 4 Steps Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
           {steps.map((step, idx) => (
-            <div key={idx} className="double-bezel flex flex-col justify-between">
+            <div key={idx} className="double-bezel card-lift flex flex-col justify-between">
               <div className="double-bezel-inner h-full flex flex-col justify-between p-6">
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">

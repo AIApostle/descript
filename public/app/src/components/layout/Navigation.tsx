@@ -90,7 +90,7 @@ export default function Navigation() {
             type="button"
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="p-2 rounded-full text-base-500 hover:text-base-900 dark:text-base-400 dark:hover:text-white hover:bg-base-100/80 dark:hover:bg-white/5 transition-colors"
+            className="btn-step p-2 rounded-full text-base-500 hover:text-base-900 dark:text-base-400 dark:hover:text-white hover:bg-base-100/80 dark:hover:bg-white/5 transition-colors"
           >
             {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
@@ -99,7 +99,7 @@ export default function Navigation() {
             <div className="flex items-center gap-2">
               <Link
                 to="/dashboard"
-                className="group inline-flex items-center gap-2 bg-base-900 dark:bg-white text-white dark:text-base-950 hover:bg-base-800 dark:hover:bg-base-100 text-xs sm:text-sm font-medium px-4 py-2 rounded-full shadow-sm transition-all duration-150 active:scale-[0.98]"
+                className="btn-step group inline-flex items-center gap-2 bg-base-900 dark:bg-white text-white dark:text-base-950 hover:bg-base-800 dark:hover:bg-base-100 text-xs sm:text-sm font-medium px-4 py-2 rounded-full shadow-sm transition-all duration-150 active:scale-[0.98]"
               >
                 <span>Console</span>
                 <span className="h-5 w-5 rounded-full bg-white/10 dark:bg-black/10 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
@@ -109,7 +109,7 @@ export default function Navigation() {
               <button
                 type="button"
                 onClick={logout}
-                className="hidden sm:inline-block text-xs font-medium text-base-500 hover:text-base-800 dark:hover:text-base-200 px-2.5 py-1"
+                className="btn-step hidden sm:inline-block text-xs font-medium text-base-500 hover:text-base-800 dark:hover:text-base-200 px-2.5 py-1"
               >
                 Exit
               </button>
@@ -118,17 +118,17 @@ export default function Navigation() {
             <div className="flex items-center gap-2">
               <Link
                 to="/login"
-                className="hidden sm:inline-flex text-xs sm:text-sm font-medium text-base-700 dark:text-base-200 hover:text-base-950 dark:hover:text-white px-3 py-1.5 rounded-full hover:bg-base-100/60 dark:hover:bg-white/5 transition-colors"
+                className="btn-step hidden sm:inline-flex text-xs sm:text-sm font-medium text-base-700 dark:text-base-200 hover:text-base-950 dark:hover:text-white px-3 py-1.5 rounded-full hover:bg-base-100/60 dark:hover:bg-white/5 transition-colors"
               >
                 Sign In
               </Link>
               <Link
                 to="/signup"
-                className="group inline-flex items-center gap-2 bg-gradient-to-r from-descript-600 to-indigo-600 hover:from-descript-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-full shadow-sm shadow-descript-600/30 transition-all duration-150 active:scale-[0.98]"
+                className="btn-step group inline-flex items-center gap-2 bg-gradient-to-r from-descript-600 to-indigo-600 hover:from-descript-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-full shadow-sm shadow-descript-600/30 transition-all duration-150 active:scale-[0.98]"
               >
                 <span>Register Agent</span>
                 <span className="h-5 w-5 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
-                  <ArrowRight className="h-3 w-3" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </Link>
             </div>

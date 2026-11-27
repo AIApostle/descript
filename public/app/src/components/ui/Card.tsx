@@ -18,7 +18,7 @@ export const Card: React.FC<CardProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`double-bezel ${className}`}>
+    <div className={`double-bezel card-lift ${className}`}>
       <div className="double-bezel-inner p-0 overflow-hidden">
         {(title || actions) && (
           <div className="px-6 py-5 border-b border-base-200/80 dark:border-base-800/80 flex flex-wrap items-start justify-between gap-4 bg-base-50/50 dark:bg-base-900/30">

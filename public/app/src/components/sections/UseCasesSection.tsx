@@ -61,7 +61,7 @@ export default function UseCasesSection() {
         {/* 4 Cards Bento */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto mb-16">
           {useCases.map((uc, index) => (
-            <div key={index} className="double-bezel">
+            <div key={index} className="double-bezel card-lift">
               <div className="double-bezel-inner h-full flex flex-col justify-between p-7 sm:p-8">
                 <div>
                   <div className="flex items-center justify-between gap-3 mb-5">
