@@ -1,7 +1,7 @@
 import {
   ArrowRight,
-  Database,
   FileCheck2,
+  Fingerprint,
   KeyRound,
   Layers,
   Radio,
@@ -12,37 +12,37 @@ export default function HowItWorksSection() {
   const steps = [
     {
       number: '01',
-      title: 'Generate Local Keypair',
+      title: 'Register Canonical ID',
       description:
-        'Create an Ed25519 public/private keypair client-side via Python SDK or in-browser WebCrypto. Private keys never leave your custody.',
-      code: 'pair = KeyPair.generate()\n# Secret key remains in memory/HSM',
-      icon: <KeyRound className="h-5 w-5" />,
-      badge: 'Zero Custody',
+        'Register your agent inside a governed Byte Network namespace (e.g. kiroween) to receive an immutable, timestamp-ordered UUIDv7 Agent ID.',
+      code: 'agent = client.agents.register(\n    name="Settlement Worker",\n    network="kiroween"\n)\n# Assigned persistent UUIDv7 Agent ID',
+      icon: <Fingerprint className="h-5 w-5" />,
+      badge: 'Canonical ID',
     },
     {
       number: '02',
-      title: 'Bind to Byte Network',
+      title: 'Generate Local Keypair',
       description:
-        'Register your agent public key inside a governed Byte Network namespace (e.g. kiroween) to receive an immutable UUIDv7 Agent ID.',
-      code: 'agent = client.agents.create(\n    name="Trader",\n    public_key=pair.public_key_hex\n)',
-      icon: <Database className="h-5 w-5" />,
-      badge: 'Neon Database',
+        'Create an Ed25519 keypair client-side. Private keys never leave your agent runtime. Only the public key is cryptographically bound to the ID.',
+      code: 'pair = KeyPair.generate()\nclient.credentials.bind(agent.id, pair.public_key)\n# Secret key remains in memory/HSM',
+      icon: <KeyRound className="h-5 w-5" />,
+      badge: 'Zero Custody',
     },
     {
       number: '03',
       title: 'Receive Bytecript Passport',
       description:
-        'Descript signs a portable Bytecript manifest with the controller key, embedding claims, status, and public key fingerprint.',
-      code: 'bytecript = agent.bytecript\n# Includes cryptographic authority seal',
+        'Descript signs a portable Bytecript credential with the controller seal, embedding claims, lifecycle status, and public key fingerprint.',
+      code: 'bytecript = client.bytecript.get(agent.id)\n# Cryptographically signed digital credential\nassert bytecript.controller_verified',
       icon: <FileCheck2 className="h-5 w-5" />,
-      badge: 'Ed25519 Seal',
+      badge: 'Bytecript Passport',
     },
     {
       number: '04',
       title: 'Mutual Zero-Trust Verification',
       description:
-        'Services issue a cryptographic nonce challenge. The agent signs it with its private key, proving identity with zero shared secrets.',
-      code: 'challenge = client.verify.create_challenge(agent_id)\nsig = pair.sign(challenge.nonce)\nvalid = client.verify.solve(challenge.id, sig)',
+        'Services issue a cryptographic random nonce challenge. The agent signs it with its private key, verifying authenticity with zero shared secrets.',
+      code: 'challenge = verifier.create_challenge(agent.id)\nsig = pair.sign(challenge.nonce)\nassert verifier.verify(challenge.id, sig)',
       icon: <Radio className="h-5 w-5" />,
       badge: 'Challenge-Response',
     },
@@ -53,7 +53,7 @@ export default function HowItWorksSection() {
       <div className="container-wide">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-trust-50 dark:bg-trust-950/80 text-trust-700 dark:text-trust-300 border border-trust-200/80 dark:border-trust-800/80 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-descript-50 dark:bg-descript-950/80 text-descript-700 dark:text-descript-300 border border-descript-200/80 dark:border-descript-800/80 mb-4">
             <Layers className="h-3.5 w-3.5" />
             <span>Cryptographic Handshake Protocol</span>
           </div>
@@ -61,7 +61,7 @@ export default function HowItWorksSection() {
             How Descript issues and verifies identities
           </h2>
           <p className="text-base sm:text-lg text-base-600 dark:text-base-300 leading-relaxed">
-            From local key generation to cross-platform challenge signing, every step is mathematically verifiable.
+            From registration and local key custody to portable Bytecript issuance and challenge signing, every step is mathematically verifiable.
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export default function HowItWorksSection() {
                     <span className="font-mono text-2xl font-black text-descript-600/60 dark:text-descript-400/60">
                       {step.number}
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-base-100 dark:bg-base-900 text-base-500 border border-base-200 dark:border-base-800">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-base-100 dark:bg-base-900 text-base-600 dark:text-base-300 border border-base-200 dark:border-base-800">
                       {step.badge}
                     </span>
                   </div>
@@ -105,9 +105,9 @@ export default function HowItWorksSection() {
         <div className="text-center">
           <Link
             to="/docs"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-descript-600 dark:text-descript-400 hover:text-descript-700 dark:hover:text-descript-300 group"
+            className="btn-step inline-flex items-center gap-2 text-sm font-semibold text-descript-600 dark:text-descript-400 hover:text-descript-700 dark:hover:text-descript-300 group"
           >
-            <span>Read full cryptographic protocol specification</span>
+            <span>Explore the developer documentation</span>
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

@@ -13,7 +13,7 @@ export default function ValuePropositionSection() {
       badge: 'Persistence',
       title: 'Canonical Identity Registry',
       description:
-        'Issue immutable UUIDv7 Agent IDs persisted in a resilient Neon PostgreSQL cluster. Identities survive model updates and host migrations.',
+        'Issue immutable UUIDv7 Agent IDs persisted in a resilient canonical registry. Identities survive model updates and host migrations.',
       features: [
         'Deterministic Agent IDs with embedded timestamp ordering',
         'Scoped Byte Network residency (e.g. kiroween)',
@@ -131,9 +131,9 @@ export default function ValuePropositionSection() {
                 </div>
               </div>
               <div className="px-4 py-2.5 rounded-xl bg-base-50 dark:bg-base-900 border border-base-200 dark:border-base-800 text-center">
-                <div className="text-xs text-base-400 font-medium">Database Backend</div>
+                <div className="text-xs text-base-400 font-medium">Key Custody</div>
                 <div className="text-base font-bold font-mono text-base-900 dark:text-white">
-                  Neon Postgres
+                  Zero Server Custody
                 </div>
               </div>
             </div>

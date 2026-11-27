@@ -16,7 +16,7 @@ export default function ProblemSection() {
     {
       title: 'Ephemeral Session Amnesia',
       traditional: 'Agents lose identity between container reboots or provider migrations.',
-      descript: 'Permanent UUIDv7 Agent IDs persisted canonically in Neon PostgreSQL.',
+      descript: 'Permanent UUIDv7 Agent IDs persisted canonically across infrastructure migrations.',
     },
     {
       title: 'Forged Payloads & Impersonation',

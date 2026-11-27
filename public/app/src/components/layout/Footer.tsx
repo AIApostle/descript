@@ -18,8 +18,8 @@ export default function Footer() {
               The cryptographic identity, credential registration, and verification standard for autonomous AI agents.
             </p>
             <div className="flex items-center gap-2 text-xs text-base-400 font-mono">
-              <span className="h-2 w-2 rounded-full bg-identity-500 animate-pulse" />
-              <span>Neon PostgreSQL • Ed25519 Engine</span>
+              <span className="h-2 w-2 rounded-full bg-descript-500 animate-pulse" />
+              <span>Cryptographic Identity Standard • Ed25519 Engine</span>
             </div>
           </div>
 
@@ -55,12 +55,12 @@ export default function Footer() {
             <ul className="space-y-2 text-xs sm:text-sm text-base-500 dark:text-base-400">
               <li>
                 <Link to="/docs" className="hover:text-base-900 dark:hover:text-white transition-colors">
-                  Python SDK Docs
+                  Documentation
                 </Link>
               </li>
               <li>
-                <Link to="/developers" className="hover:text-base-900 dark:hover:text-white transition-colors">
-                  API Keys & Health
+                <Link to="/docs" className="hover:text-base-900 dark:hover:text-white transition-colors">
+                  Python SDK Guide
                 </Link>
               </li>
               <li>
@@ -104,7 +104,7 @@ export default function Footer() {
         <div className="pt-8 border-t border-base-200 dark:border-base-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-base-500 dark:text-base-400">
           <div>&copy; {new Date().getFullYear()} Descript Identity Infrastructure. All rights reserved.</div>
           <div className="flex items-center gap-4">
-            <span>Powered by Neon DB</span>
+            <span>Zero-Trust Architecture</span>
             <span>&bull;</span>
             <span>Client-Side Cryptography</span>
           </div>

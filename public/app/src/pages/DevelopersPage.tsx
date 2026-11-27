@@ -122,9 +122,23 @@ export default function DevelopersPage() {
 
   const content = (
     <div className="space-y-8">
+      {/* Page Header */}
+      <div className="mb-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-descript-50 dark:bg-descript-950/80 text-descript-700 dark:text-descript-300 border border-descript-200/80 dark:border-descript-800/80 mb-3">
+          <Terminal className="h-3.5 w-3.5" />
+          <span>Documentation</span>
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-base-950 dark:text-white mb-2">
+          Developer Documentation & Protocol Specs
+        </h1>
+        <p className="text-sm sm:text-base text-base-600 dark:text-base-300 max-w-3xl leading-relaxed">
+          Comprehensive guides and specifications for registering autonomous agents, managing zero-custody Ed25519 keypairs, issuing signed Bytecript credentials, and performing zero-trust nonce challenges.
+        </p>
+      </div>
+
       {/* Install & Quickstart */}
       <Card
-        title="Descript Python SDK"
+        title="Python SDK & Client Guide"
         subtitle="Official synchronous and asynchronous Python client for agent registration, Ed25519 signing, and Bytecript verification."
       >
         <div className="space-y-6">
@@ -293,7 +307,7 @@ export default function DevelopersPage() {
               </thead>
               <tbody className="divide-y divide-base-200 dark:divide-base-800 text-base-700 dark:text-base-300">
                 {[
-                  ['GET', '/api/v1/health', 'API and Neon PostgreSQL readiness check'],
+                  ['GET', '/api/v1/health', 'API and database readiness check'],
                   ['POST', '/api/v1/agents', 'Register a new agent and issue Bytecript'],
                   ['GET', '/api/v1/agents/{id}', 'Fetch authenticated agent details'],
                   ['GET', '/api/v1/agents/{id}/bytecript', 'Retrieve signed Bytecript credential'],
@@ -324,8 +338,8 @@ export default function DevelopersPage() {
   if (isAuthenticated) {
     return (
       <DashboardLayout
-        title="Python SDK & Developer Portal"
-        subtitle="Integrate Descript agent identity and Bytecript verification into your Python agents."
+        title="Documentation & Protocol Specs"
+        subtitle="Official specifications, SDK integration guides, and API keys for autonomous agents."
       >
         {content}
       </DashboardLayout>

@@ -21,8 +21,7 @@ export default function Navigation() {
     { label: 'How It Works', to: '/#how-it-works', isHash: true },
     { label: 'Architecture', to: '/#value', isHash: true },
     { label: 'Use Cases', to: '/#use-cases', isHash: true },
-    { label: 'Python SDK', to: '/docs', isHash: false },
-    { label: 'Developers', to: '/developers', isHash: false },
+    { label: 'Docs', to: '/docs', isHash: false },
   ];
 
   const isActive = (path: string) => {
@@ -47,13 +46,6 @@ export default function Navigation() {
           <div className="flex items-center gap-2">
             <span className="font-semibold text-base sm:text-lg text-base-900 dark:text-white tracking-tight">
               Descript
-            </span>
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-identity-50 dark:bg-identity-950/80 text-identity-700 dark:text-identity-300 border border-identity-200/80 dark:border-identity-800/80">
-              <span className="status-beacon">
-                <span className="status-beacon-ping bg-identity-400" />
-                <span className="status-beacon-dot bg-identity-500" />
-              </span>
-              Neon Active
             </span>
           </div>
         </Link>
@@ -150,17 +142,29 @@ export default function Navigation() {
       {/* Mobile Drawer */}
       {isMenuOpen && (
         <div className="pointer-events-auto md:hidden mt-2 max-w-6xl mx-auto glass rounded-2xl p-4 shadow-2xl border border-base-200 dark:border-white/10 space-y-2 animate-fade-in">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              onClick={() => setIsMenuOpen(false)}
-              className="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-base-700 dark:text-base-200 hover:bg-base-100 dark:hover:bg-white/5"
-            >
-              <span>{item.label}</span>
-              <ArrowRight className="h-4 w-4 opacity-40" />
-            </Link>
-          ))}
+          {navItems.map((item) =>
+            item.isHash ? (
+              <a
+                key={item.label}
+                href={item.to}
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-base-700 dark:text-base-200 hover:bg-base-100 dark:hover:bg-white/5"
+              >
+                <span>{item.label}</span>
+                <ArrowRight className="h-4 w-4 opacity-40" />
+              </a>
+            ) : (
+              <Link
+                key={item.label}
+                to={item.to}
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-base-700 dark:text-base-200 hover:bg-base-100 dark:hover:bg-white/5"
+              >
+                <span>{item.label}</span>
+                <ArrowRight className="h-4 w-4 opacity-40" />
+              </Link>
+            )
+          )}
           <div className="pt-2 border-t border-base-200 dark:border-base-800 flex flex-col gap-2">
             {!isAuthenticated && (
               <Link

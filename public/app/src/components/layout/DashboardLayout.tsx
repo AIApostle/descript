@@ -39,7 +39,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     { to: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" /> },
     { to: '/agents/new', label: 'Register Agent', icon: <Plus className="h-4 w-4" /> },
     { to: '/verify', label: 'Verify Agent', icon: <ShieldCheck className="h-4 w-4" /> },
-    { to: '/developers', label: 'Python SDK & Keys', icon: <Code2 className="h-4 w-4" /> },
+    { to: '/docs', label: 'Docs & Protocol Specs', icon: <Code2 className="h-4 w-4" /> },
     { to: '/settings', label: 'Settings', icon: <Settings className="h-4 w-4" /> },
   ];
 

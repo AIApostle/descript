@@ -112,7 +112,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                 className="btn-step inline-flex items-center justify-center gap-2 bg-base-100/80 dark:bg-base-900/80 hover:bg-base-200 dark:hover:bg-base-800 text-base-800 dark:text-base-100 font-semibold text-sm sm:text-base px-6 py-3.5 rounded-full border border-base-200 dark:border-base-800 transition-all duration-200"
               >
                 <Terminal className="h-4 w-4 text-descript-600 dark:text-descript-400" />
-                <span>Explore Python SDK</span>
+                <span>Documentation</span>
               </Link>
             </div>
 
@@ -127,12 +127,12 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                 <span>Private keys stay local</span>
               </div>
               <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
-                <span className="font-semibold text-base-900 dark:text-white block">Neon Postgres</span>
-                <span>Multi-tenant pooling</span>
+                <span className="font-semibold text-base-900 dark:text-white block">Persistent ID</span>
+                <span>Canonical UUIDv7</span>
               </div>
               <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
-                <span className="font-semibold text-base-900 dark:text-white block">Python 3.11+</span>
-                <span>Async & Sync SDK</span>
+                <span className="font-semibold text-base-900 dark:text-white block">Bytecript</span>
+                <span>Portable Credential</span>
               </div>
             </div>
           </div>
@@ -175,7 +175,7 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                           : 'text-base-500 hover:text-base-800 dark:hover:text-base-200'
                       }`}
                     >
-                      Python SDK
+                      Docs & SDK
                     </button>
                     <button
                       type="button"
