@@ -19,9 +19,11 @@ from .exceptions import (
 )
 from .models import (
     Agent,
+    AgentClaimResult,
     ApiKey,
     AuditEvent,
     AuthSession,
+    AuthenticatedAgent,
     Bytecript,
     BytecriptVerifyResult,
     ByteNetwork,
@@ -29,16 +31,20 @@ from .models import (
     Credential,
     HealthStatus,
     IssuerInfo,
+    PlatformCodeSession,
+    PlatformTokenExchange,
     User,
     VerificationResult,
 )
 
 __all__ = [
     "Agent",
+    "AgentClaimResult",
     "ApiKey",
     "AsyncDescriptClient",
     "AuditEvent",
     "AuthSession",
+    "AuthenticatedAgent",
     "AuthenticationError",
     "ByteNetwork",
     "Bytecript",
@@ -53,6 +59,8 @@ __all__ = [
     "IssuerInfo",
     "KeyPair",
     "NotFoundError",
+    "PlatformCodeSession",
+    "PlatformTokenExchange",
     "User",
     "ValidationError",
     "VerificationResult",

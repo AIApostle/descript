@@ -167,3 +167,42 @@ class HealthStatus(BaseModel):
     latencyMs: float
     timestamp: datetime
     detail: str | None = None
+
+
+class PlatformCodeSession(BaseModel):
+    authSessionId: str
+    userCode: str
+    platformName: str
+    platformDomain: str
+    requestedScopes: list[str] = Field(default_factory=list)
+    verificationUri: str
+    expiresAt: datetime
+    pollInterval: int = 2
+
+
+class AgentClaimResult(BaseModel):
+    claimed: bool
+    authSessionId: str
+    agentId: str
+    agentName: str
+    status: str
+    message: str
+
+
+class AuthenticatedAgent(BaseModel):
+    id: str
+    name: str
+    byteNetwork: str
+    residence: str
+    status: str
+    fingerprint: str
+    controllerOrg: str | None = None
+
+
+class PlatformTokenExchange(BaseModel):
+    status: str
+    agent: AuthenticatedAgent | None = None
+    grantedScopes: list[str] = Field(default_factory=list)
+    accessToken: str | None = None
+    expiresAt: datetime | None = None
+

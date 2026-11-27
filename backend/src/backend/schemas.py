@@ -343,3 +343,61 @@ class ApiKeyOut(BaseModel):
 
 class ApiKeyCreateResponse(ApiKeyOut):
     secret: str
+
+
+class PlatformCodeRequest(BaseModel):
+    platformName: str = Field(..., min_length=2, max_length=128)
+    platformDomain: str = Field(..., min_length=3, max_length=128)
+    requestedScopes: list[str] = Field(default_factory=list)
+    agentId: str | None = None
+    expiresInSeconds: int = Field(default=900, ge=60, le=3600)
+
+
+class PlatformCodeResponse(BaseModel):
+    authSessionId: str
+    userCode: str
+    platformName: str
+    platformDomain: str
+    requestedScopes: list[str]
+    verificationUri: str
+    expiresAt: datetime
+    pollInterval: int = 2
+
+
+class AgentClaimCodeRequest(BaseModel):
+    userCode: str = Field(..., min_length=4, max_length=32)
+    agentId: str
+    signature: str
+
+
+class AgentClaimCodeResponse(BaseModel):
+    claimed: bool
+    authSessionId: str
+    agentId: str
+    agentName: str
+    status: str
+    message: str
+
+
+class PlatformCodeExchangeRequest(BaseModel):
+    authSessionId: str
+    userCode: str
+
+
+class AuthenticatedAgentOut(BaseModel):
+    id: str
+    name: str
+    byteNetwork: str
+    residence: str
+    status: str
+    fingerprint: str
+    controllerOrg: str | None = None
+
+
+class PlatformCodeExchangeResponse(BaseModel):
+    status: str
+    agent: AuthenticatedAgentOut | None = None
+    grantedScopes: list[str] = Field(default_factory=list)
+    accessToken: str | None = None
+    expiresAt: datetime | None = None
+

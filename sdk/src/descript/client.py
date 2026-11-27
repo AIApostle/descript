@@ -14,10 +14,12 @@ from .exceptions import (
 )
 from .models import (
     Agent,
+    AgentClaimResult,
     AgentStatus,
     ApiKey,
     AuditEvent,
     AuthSession,
+    AuthenticatedAgent,
     Bytecript,
     BytecriptVerifyResult,
     ByteNetwork,
@@ -25,6 +27,8 @@ from .models import (
     Credential,
     HealthStatus,
     IssuerInfo,
+    PlatformCodeSession,
+    PlatformTokenExchange,
     User,
     VerificationResult,
 )
@@ -407,6 +411,77 @@ class _SyncApiKeysResource:
         self._c._request("DELETE", f"/api-keys/{key_id}")
 
 
+class _SyncPlatformAuthResource:
+    def __init__(self, client: DescriptClient) -> None:
+        self._c = client
+
+    def request_code(
+        self,
+        platform_name: str,
+        platform_domain: str,
+        *,
+        scopes: list[str] | None = None,
+        agent_id: str | None = None,
+        expires_in_seconds: int = 900,
+    ) -> PlatformCodeSession:
+        """Called by third-party platforms to issue an OTP verification code for an agent."""
+        data = self._c._request(
+            "POST",
+            "/auth/platform/code/request",
+            json={
+                "platformName": platform_name,
+                "platformDomain": platform_domain,
+                "requestedScopes": scopes or [],
+                "agentId": agent_id,
+                "expiresInSeconds": expires_in_seconds,
+            },
+        )
+        return PlatformCodeSession.model_validate(data)
+
+    def get_code_info(self, user_code: str) -> dict[str, Any]:
+        """Inspect a verification code."""
+        return self._c._request("GET", f"/auth/platform/code/{user_code}")
+
+    def claim_code(
+        self,
+        user_code: str,
+        agent_id: str,
+        keypair: KeyPair,
+    ) -> AgentClaimResult:
+        """Called by an agent (or controller) to sign and claim an OTP verification code."""
+        sig = keypair.sign(user_code)
+        data = self._c._request(
+            "POST",
+            "/auth/platform/code/claim",
+            json={
+                "userCode": user_code,
+                "agentId": agent_id,
+                "signature": sig,
+            },
+        )
+        return AgentClaimResult.model_validate(data)
+
+    def exchange_code(
+        self,
+        auth_session_id: str,
+        user_code: str,
+    ) -> PlatformTokenExchange:
+        """Called by third-party platforms to exchange claimed code for the verified agent token."""
+        data = self._c._request(
+            "POST",
+            "/auth/platform/code/exchange",
+            json={
+                "authSessionId": auth_session_id,
+                "userCode": user_code,
+            },
+        )
+        return PlatformTokenExchange.model_validate(data)
+
+    def verify_token(self, token: str) -> dict[str, Any]:
+        """Called by third-party platforms to verify an incoming Descript Agent Token."""
+        return self._c._request("POST", "/auth/platform/token/verify", params={"token": token})
+
+
 class DescriptClient(_BaseClient):
     """Synchronous client for the Descript AI Agent Identity Platform."""
 
@@ -429,6 +504,7 @@ class DescriptClient(_BaseClient):
         self.credentials = _SyncCredentialsResource(self)
         self.verify = _SyncVerifyResource(self)
         self.api_keys = _SyncApiKeysResource(self)
+        self.platform_auth = _SyncPlatformAuthResource(self)
 
     def _request(self, method: str, path: str, **kwargs: Any) -> Any:
         headers = self._headers()
@@ -768,6 +844,77 @@ class _AsyncApiKeysResource:
         await self._c._request("DELETE", f"/api-keys/{key_id}")
 
 
+class _AsyncPlatformAuthResource:
+    def __init__(self, client: AsyncDescriptClient) -> None:
+        self._c = client
+
+    async def request_code(
+        self,
+        platform_name: str,
+        platform_domain: str,
+        *,
+        scopes: list[str] | None = None,
+        agent_id: str | None = None,
+        expires_in_seconds: int = 900,
+    ) -> PlatformCodeSession:
+        """Called by third-party platforms to issue an OTP verification code for an agent."""
+        data = await self._c._request(
+            "POST",
+            "/auth/platform/code/request",
+            json={
+                "platformName": platform_name,
+                "platformDomain": platform_domain,
+                "requestedScopes": scopes or [],
+                "agentId": agent_id,
+                "expiresInSeconds": expires_in_seconds,
+            },
+        )
+        return PlatformCodeSession.model_validate(data)
+
+    async def get_code_info(self, user_code: str) -> dict[str, Any]:
+        """Inspect a verification code."""
+        return await self._c._request("GET", f"/auth/platform/code/{user_code}")
+
+    async def claim_code(
+        self,
+        user_code: str,
+        agent_id: str,
+        keypair: KeyPair,
+    ) -> AgentClaimResult:
+        """Called by an agent (or controller) to sign and claim an OTP verification code."""
+        sig = keypair.sign(user_code)
+        data = await self._c._request(
+            "POST",
+            "/auth/platform/code/claim",
+            json={
+                "userCode": user_code,
+                "agentId": agent_id,
+                "signature": sig,
+            },
+        )
+        return AgentClaimResult.model_validate(data)
+
+    async def exchange_code(
+        self,
+        auth_session_id: str,
+        user_code: str,
+    ) -> PlatformTokenExchange:
+        """Called by third-party platforms to exchange claimed code for the verified agent token."""
+        data = await self._c._request(
+            "POST",
+            "/auth/platform/code/exchange",
+            json={
+                "authSessionId": auth_session_id,
+                "userCode": user_code,
+            },
+        )
+        return PlatformTokenExchange.model_validate(data)
+
+    async def verify_token(self, token: str) -> dict[str, Any]:
+        """Called by third-party platforms to verify an incoming Descript Agent Token."""
+        return await self._c._request("POST", "/auth/platform/token/verify", params={"token": token})
+
+
 class AsyncDescriptClient(_BaseClient):
     """Asynchronous client for the Descript AI Agent Identity Platform."""
 
@@ -790,6 +937,7 @@ class AsyncDescriptClient(_BaseClient):
         self.credentials = _AsyncCredentialsResource(self)
         self.verify = _AsyncVerifyResource(self)
         self.api_keys = _AsyncApiKeysResource(self)
+        self.platform_auth = _AsyncPlatformAuthResource(self)
 
     async def _request(self, method: str, path: str, **kwargs: Any) -> Any:
         headers = self._headers()

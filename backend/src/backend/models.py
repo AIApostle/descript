@@ -163,3 +163,24 @@ class AuthChallenge(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
 
     agent: Mapped[Agent] = relationship(back_populates="challenges")
+
+
+class PlatformAuthSession(Base):
+    __tablename__ = "platform_auth_sessions"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True, default=lambda: new_prefixed_id("pas"))
+    user_code: Mapped[str] = mapped_column(String(32), unique=True, index=True, nullable=False)
+    platform_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    platform_domain: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
+    requested_scopes: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    status: Mapped[str] = mapped_column(String(32), default="pending", index=True, nullable=False)
+    agent_id: Mapped[str | None] = mapped_column(ForeignKey("agents.id", ondelete="CASCADE"), nullable=True)
+    controller_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    credential_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    access_token: Mapped[str | None] = mapped_column(String(128), unique=True, index=True, nullable=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    claimed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
+
+    agent: Mapped[Agent | None] = relationship()
+

@@ -12,7 +12,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from .config import get_settings
 from .database import get_session_factory, init_db
-from .routers import agents, api_keys, auth, networks, verify
+from .routers import agents, api_keys, auth, networks, platform_auth, verify
 from .schemas import HealthOut
 
 
@@ -77,6 +77,7 @@ def create_app() -> FastAPI:
     app.include_router(agents.router, prefix=settings.api_prefix)
     app.include_router(verify.router, prefix=settings.api_prefix)
     app.include_router(api_keys.router, prefix=settings.api_prefix)
+    app.include_router(platform_auth.router, prefix=settings.api_prefix)
 
     return app
 
