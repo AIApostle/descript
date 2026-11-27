@@ -13,7 +13,7 @@ In your [Render Dashboard](https://dashboard.render.com/) under your Web Service
 | Setting | Value |
 | :--- | :--- |
 | **Runtime** | `Python` |
-| **Python Version** | `3.12.3` (Pinned via `backend/.python-version`) |
+| **Python Version** | `3.11` (Pinned via `.python-version` and `backend/.python-version`) |
 | **Root Directory** | `backend` |
 | **Build Command** | `uv sync` |
 | **Start Command** | `uv run uvicorn main:app --host 0.0.0.0 --port $PORT` |
