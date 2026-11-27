@@ -39,7 +39,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const navigate = useNavigate();
 
   const navItems = [
-    { to: '/dashboard', label: 'Agents Fleet', icon: <LayoutDashboard className="h-4 w-4" /> },
+    { to: '/dashboard', label: 'Overview', icon: <LayoutDashboard className="h-4 w-4" /> },
     { to: '/dashboard?tab=netprints', label: 'Netprints (Footprints)', icon: <Globe className="h-4 w-4" /> },
     { to: '/dashboard?tab=messages', label: 'Agent Messages', icon: <Mail className="h-4 w-4" /> },
     { to: '/dashboard?tab=auth-sessions', label: 'Platform Sessions', icon: <Activity className="h-4 w-4" /> },

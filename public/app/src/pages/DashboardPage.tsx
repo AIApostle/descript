@@ -6,6 +6,7 @@ import {
   Code2,
   Globe,
   KeyRound,
+  LayoutDashboard,
   Mail,
   Network,
   Plus,
@@ -282,8 +283,8 @@ footprint = client.netprints.record(
               : 'bg-base-100 dark:bg-base-900 text-base-600 dark:text-base-400 hover:text-base-950 dark:hover:text-white'
           }`}
         >
-          <Bot className="h-4 w-4" />
-          <span>Agent Fleet ({agents.length})</span>
+          <LayoutDashboard className="h-4 w-4" />
+          <span>Overview ({agents.length})</span>
         </button>
 
         <button
