@@ -60,7 +60,7 @@ def test_neon_url_normalization():
 
 
 async def test_health_endpoints(client: AsyncClient):
-    for path in ("/health", "/api/v1/health"):
+    for path in ("/health", "/healthz", "/livez", "/readyz", "/api/v1/health", "/api/v1/healthz"):
         resp = await client.get(path)
         assert resp.status_code == 200, resp.text
         body = resp.json()

@@ -39,8 +39,12 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    @app.get("/health", response_model=HealthOut, tags=["Health"])
-    @app.get(f"{settings.api_prefix}/health", response_model=HealthOut, tags=["Health"])
+    @app.get("/health", response_model=HealthOut, tags=["Health"], summary="Service and database health check")
+    @app.get("/healthz", response_model=HealthOut, tags=["Health"], include_in_schema=False)
+    @app.get("/livez", response_model=HealthOut, tags=["Health"], include_in_schema=False)
+    @app.get("/readyz", response_model=HealthOut, tags=["Health"], include_in_schema=False)
+    @app.get(f"{settings.api_prefix}/health", response_model=HealthOut, tags=["Health"], summary="Versioned health check")
+    @app.get(f"{settings.api_prefix}/healthz", response_model=HealthOut, tags=["Health"], include_in_schema=False)
     async def health() -> JSONResponse:
         start = time.perf_counter()
         db_connected = False
