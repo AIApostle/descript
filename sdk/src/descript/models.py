@@ -240,3 +240,87 @@ class PlatformTokenExchange(BaseModel):
     def access_token(self) -> str | None:
         return self.accessToken
 
+
+class Netprint(BaseModel):
+    id: str
+    agentId: str
+    agentName: str | None = None
+    platformName: str
+    platformDomain: str
+    action: str
+    resource: str | None = None
+    status: str
+    securityLevel: str
+    ipAddress: str | None = None
+    payload: dict[str, Any] = Field(default_factory=dict)
+    createdAt: datetime
+
+    @property
+    def agent_id(self) -> str:
+        return self.agentId
+
+    @property
+    def agent_name(self) -> str | None:
+        return self.agentName
+
+    @property
+    def platform_name(self) -> str:
+        return self.platformName
+
+    @property
+    def platform_domain(self) -> str:
+        return self.platformDomain
+
+    @property
+    def security_level(self) -> str:
+        return self.securityLevel
+
+    @property
+    def created_at(self) -> datetime:
+        return self.createdAt
+
+
+class AgentMessage(BaseModel):
+    id: str
+    senderAgentId: str
+    senderAgentName: str | None = None
+    recipientAgentId: str
+    recipientAgentName: str | None = None
+    messageType: str
+    subject: str | None = None
+    content: str
+    metadata: dict[str, Any] = Field(default_factory=dict)
+    signature: str
+    status: str
+    readAt: datetime | None = None
+    createdAt: datetime
+
+    @property
+    def sender_agent_id(self) -> str:
+        return self.senderAgentId
+
+    @property
+    def recipient_agent_id(self) -> str:
+        return self.recipientAgentId
+
+    @property
+    def sender_agent_name(self) -> str | None:
+        return self.senderAgentName
+
+    @property
+    def recipient_agent_name(self) -> str | None:
+        return self.recipientAgentName
+
+    @property
+    def message_type(self) -> str:
+        return self.messageType
+
+    @property
+    def read_at(self) -> datetime | None:
+        return self.readAt
+
+    @property
+    def created_at(self) -> datetime:
+        return self.createdAt
+
+

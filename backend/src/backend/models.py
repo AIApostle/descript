@@ -185,3 +185,45 @@ class PlatformAuthSession(Base):
 
     agent: Mapped[Agent | None] = relationship()
 
+
+class Netprint(Base):
+    """Immutable trace of an agent's footprint / activity across platforms on the internet."""
+
+    __tablename__ = "netprints"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True, default=lambda: new_prefixed_id("netp"))
+    agent_id: Mapped[str] = mapped_column(ForeignKey("agents.id", ondelete="CASCADE"), index=True, nullable=False)
+    platform_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    platform_domain: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
+    action: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
+    resource: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    status: Mapped[str] = mapped_column(String(32), default="success", nullable=False)
+    security_level: Mapped[str] = mapped_column(String(32), default="standard", nullable=False)
+    ip_address: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    payload: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, index=True, nullable=False)
+
+    agent: Mapped[Agent] = relationship()
+
+
+class AgentMessage(Base):
+    """Cryptographically signed agent-to-agent direct message."""
+
+    __tablename__ = "agent_messages"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True, default=lambda: new_prefixed_id("msg"))
+    sender_agent_id: Mapped[str] = mapped_column(ForeignKey("agents.id", ondelete="CASCADE"), index=True, nullable=False)
+    recipient_agent_id: Mapped[str] = mapped_column(ForeignKey("agents.id", ondelete="CASCADE"), index=True, nullable=False)
+    message_type: Mapped[str] = mapped_column(String(64), default="text", nullable=False)
+    subject: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    message_metadata: Mapped[dict[str, Any]] = mapped_column("metadata", JSON, default=dict, nullable=False)
+    signature: Mapped[str] = mapped_column(String(256), nullable=False)
+    status: Mapped[str] = mapped_column(String(32), default="unread", index=True, nullable=False)
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, index=True, nullable=False)
+
+    sender: Mapped[Agent] = relationship(foreign_keys=[sender_agent_id])
+    recipient: Mapped[Agent] = relationship(foreign_keys=[recipient_agent_id])
+
+

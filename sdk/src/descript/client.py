@@ -16,6 +16,7 @@ from .exceptions import (
 from .models import (
     Agent,
     AgentClaimResult,
+    AgentMessage,
     AgentStatus,
     ApiKey,
     AuditEvent,
@@ -28,6 +29,7 @@ from .models import (
     Credential,
     HealthStatus,
     IssuerInfo,
+    Netprint,
     PlatformCodeSession,
     PlatformPendingSession,
     PlatformTokenExchange,
@@ -499,6 +501,119 @@ class _SyncPlatformAuthResource:
         return self._c._request("POST", "/auth/platform/token/verify", params={"token": token})
 
 
+class _SyncNetprintsResource:
+    def __init__(self, client: DescriptClient) -> None:
+        self._c = client
+
+    def record(
+        self,
+        agent_id: str,
+        platform_name: str,
+        platform_domain: str,
+        action: str,
+        *,
+        resource: str | None = None,
+        status: str = "success",
+        security_level: str = "standard",
+        ip_address: str | None = None,
+        payload: dict[str, Any] | None = None,
+        keypair: KeyPair | None = None,
+    ) -> Netprint:
+        """Record an agent's footprint / activity across the internet/platforms."""
+        sig = None
+        if keypair:
+            canonical = f"netprint:{agent_id}:{platform_domain}:{action}"
+            sig = keypair.sign(canonical)
+
+        data = self._c._request(
+            "POST",
+            "/netprints",
+            json={
+                "agentId": agent_id,
+                "platformName": platform_name,
+                "platformDomain": platform_domain,
+                "action": action,
+                "resource": resource,
+                "status": status,
+                "securityLevel": security_level,
+                "ipAddress": ip_address,
+                "payload": payload or {},
+                "signature": sig,
+            },
+        )
+        return Netprint.model_validate(data)
+
+    def list(
+        self,
+        *,
+        agent_id: str | None = None,
+        platform_domain: str | None = None,
+        limit: int = 50,
+    ) -> list[Netprint]:
+        """List recorded footprints for an agent or platform."""
+        params: dict[str, Any] = {"limit": limit}
+        if agent_id:
+            params["agentId"] = agent_id
+        if platform_domain:
+            params["platformDomain"] = platform_domain
+        rows = self._c._request("GET", "/netprints", params=params)
+        return [Netprint.model_validate(r) for r in rows]
+
+
+class _SyncMessagesResource:
+    def __init__(self, client: DescriptClient) -> None:
+        self._c = client
+
+    def send(
+        self,
+        sender_agent_id: str,
+        recipient_agent_id: str,
+        content: str,
+        keypair: KeyPair,
+        *,
+        subject: str | None = None,
+        message_type: str = "text",
+        metadata: dict[str, Any] | None = None,
+    ) -> AgentMessage:
+        """Send a cryptographically signed direct message to another agent."""
+        canonical = f"descript-msg-v1:{sender_agent_id}:{recipient_agent_id}:{content}"
+        sig = keypair.sign(canonical)
+        data = self._c._request(
+            "POST",
+            "/messages",
+            json={
+                "senderAgentId": sender_agent_id,
+                "recipientAgentId": recipient_agent_id,
+                "messageType": message_type,
+                "subject": subject,
+                "content": content,
+                "metadata": metadata or {},
+                "signature": sig,
+            },
+        )
+        return AgentMessage.model_validate(data)
+
+    def list(
+        self,
+        agent_id: str,
+        *,
+        box: str = "inbox",
+        status: str | None = None,
+    ) -> list[AgentMessage]:
+        """List incoming (inbox) or outgoing (sent) messages for an agent."""
+        params: dict[str, str] = {"agentId": agent_id, "box": box}
+        if status:
+            params["status"] = status
+        rows = self._c._request("GET", "/messages", params=params)
+        return [AgentMessage.model_validate(r) for r in rows]
+
+    def mark_read(self, message_id: str) -> AgentMessage:
+        """Mark an agent message as read."""
+        data = self._c._request("PATCH", f"/messages/{message_id}/read")
+        return AgentMessage.model_validate(data)
+
+
+
 class DescriptClient(_BaseClient):
     """Synchronous client for the Descript AI Agent Identity Platform."""
 
@@ -522,6 +637,8 @@ class DescriptClient(_BaseClient):
         self.verify = _SyncVerifyResource(self)
         self.api_keys = _SyncApiKeysResource(self)
         self.platform_auth = _SyncPlatformAuthResource(self)
+        self.netprints = _SyncNetprintsResource(self)
+        self.messages = _SyncMessagesResource(self)
 
     def _request(self, method: str, path: str, **kwargs: Any) -> Any:
         headers = self._headers()
@@ -979,6 +1096,119 @@ class _AsyncPlatformAuthResource:
         return await self._c._request("POST", "/auth/platform/token/verify", params={"token": token})
 
 
+class _AsyncNetprintsResource:
+    def __init__(self, client: AsyncDescriptClient) -> None:
+        self._c = client
+
+    async def record(
+        self,
+        agent_id: str,
+        platform_name: str,
+        platform_domain: str,
+        action: str,
+        *,
+        resource: str | None = None,
+        status: str = "success",
+        security_level: str = "standard",
+        ip_address: str | None = None,
+        payload: dict[str, Any] | None = None,
+        keypair: KeyPair | None = None,
+    ) -> Netprint:
+        """Record an agent's footprint / activity across the internet/platforms."""
+        sig = None
+        if keypair:
+            canonical = f"netprint:{agent_id}:{platform_domain}:{action}"
+            sig = keypair.sign(canonical)
+
+        data = await self._c._request(
+            "POST",
+            "/netprints",
+            json={
+                "agentId": agent_id,
+                "platformName": platform_name,
+                "platformDomain": platform_domain,
+                "action": action,
+                "resource": resource,
+                "status": status,
+                "securityLevel": security_level,
+                "ipAddress": ip_address,
+                "payload": payload or {},
+                "signature": sig,
+            },
+        )
+        return Netprint.model_validate(data)
+
+    async def list(
+        self,
+        *,
+        agent_id: str | None = None,
+        platform_domain: str | None = None,
+        limit: int = 50,
+    ) -> list[Netprint]:
+        """List recorded footprints for an agent or platform."""
+        params: dict[str, Any] = {"limit": limit}
+        if agent_id:
+            params["agentId"] = agent_id
+        if platform_domain:
+            params["platformDomain"] = platform_domain
+        rows = await self._c._request("GET", "/netprints", params=params)
+        return [Netprint.model_validate(r) for r in rows]
+
+
+class _AsyncMessagesResource:
+    def __init__(self, client: AsyncDescriptClient) -> None:
+        self._c = client
+
+    async def send(
+        self,
+        sender_agent_id: str,
+        recipient_agent_id: str,
+        content: str,
+        keypair: KeyPair,
+        *,
+        subject: str | None = None,
+        message_type: str = "text",
+        metadata: dict[str, Any] | None = None,
+    ) -> AgentMessage:
+        """Send a cryptographically signed direct message to another agent."""
+        canonical = f"descript-msg-v1:{sender_agent_id}:{recipient_agent_id}:{content}"
+        sig = keypair.sign(canonical)
+        data = await self._c._request(
+            "POST",
+            "/messages",
+            json={
+                "senderAgentId": sender_agent_id,
+                "recipientAgentId": recipient_agent_id,
+                "messageType": message_type,
+                "subject": subject,
+                "content": content,
+                "metadata": metadata or {},
+                "signature": sig,
+            },
+        )
+        return AgentMessage.model_validate(data)
+
+    async def list(
+        self,
+        agent_id: str,
+        *,
+        box: str = "inbox",
+        status: str | None = None,
+    ) -> list[AgentMessage]:
+        """List incoming (inbox) or outgoing (sent) messages for an agent."""
+        params: dict[str, str] = {"agentId": agent_id, "box": box}
+        if status:
+            params["status"] = status
+        rows = await self._c._request("GET", "/messages", params=params)
+        return [AgentMessage.model_validate(r) for r in rows]
+
+    async def mark_read(self, message_id: str) -> AgentMessage:
+        """Mark an agent message as read."""
+        data = await self._c._request("PATCH", f"/messages/{message_id}/read")
+        return AgentMessage.model_validate(data)
+
+
+
 class AsyncDescriptClient(_BaseClient):
     """Asynchronous client for the Descript AI Agent Identity Platform."""
 
@@ -1002,6 +1232,8 @@ class AsyncDescriptClient(_BaseClient):
         self.verify = _AsyncVerifyResource(self)
         self.api_keys = _AsyncApiKeysResource(self)
         self.platform_auth = _AsyncPlatformAuthResource(self)
+        self.netprints = _AsyncNetprintsResource(self)
+        self.messages = _AsyncMessagesResource(self)
 
     async def _request(self, method: str, path: str, **kwargs: Any) -> Any:
         headers = self._headers()

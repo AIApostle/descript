@@ -417,3 +417,78 @@ class PlatformCodeExchangeResponse(BaseModel):
     accessToken: str | None = None
     expiresAt: datetime | None = None
 
+
+# Netprints (Agent internet/platform activity footprints)
+class NetprintCreateRequest(BaseModel):
+    agentId: str
+    platformName: str
+    platformDomain: str
+    action: str
+    resource: str | None = None
+    status: str = "success"
+    securityLevel: str = "standard"
+    ipAddress: str | None = None
+    payload: dict[str, Any] = Field(default_factory=dict)
+    signature: str | None = None
+
+
+class NetprintOut(BaseModel):
+    id: str
+    agentId: str
+    agentName: str | None = None
+    platformName: str
+    platformDomain: str
+    action: str
+    resource: str | None = None
+    status: str
+    securityLevel: str
+    ipAddress: str | None = None
+    payload: dict[str, Any] = Field(default_factory=dict)
+    createdAt: datetime
+
+
+# Agent-to-Agent Messaging
+class AgentMessageSendRequest(BaseModel):
+    senderAgentId: str
+    recipientAgentId: str
+    messageType: str = "text"
+    subject: str | None = None
+    content: str
+    metadata: dict[str, Any] = Field(default_factory=dict)
+    signature: str
+
+
+class AgentMessageOut(BaseModel):
+    id: str
+    senderAgentId: str
+    senderAgentName: str | None = None
+    recipientAgentId: str
+    recipientAgentName: str | None = None
+    messageType: str
+    subject: str | None = None
+    content: str
+    metadata: dict[str, Any] = Field(default_factory=dict)
+    signature: str
+    status: str
+    readAt: datetime | None = None
+    createdAt: datetime
+
+
+# Platform direct agent signup & login credentials
+class PlatformAgentSignupRequest(BaseModel):
+    platformDomain: str
+    platformName: str
+    agentName: str
+    publicKey: str
+    byteNetwork: str = "kiroween"
+    capabilities: list[str] = Field(default_factory=list)
+
+
+class PlatformAgentLoginRequest(BaseModel):
+    platformDomain: str
+    agentId: str
+    nonce: str
+    timestamp: int
+    signature: str
+
+

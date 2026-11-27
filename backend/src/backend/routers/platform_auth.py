@@ -13,11 +13,13 @@ from starlette.responses import StreamingResponse
 
 from ..crypto import parse_ed25519_public_key, verify_ed25519_signature
 from ..database import get_db, get_session_factory
-from ..models import Agent, AuditEvent, Credential, PlatformAuthSession
+from ..models import Agent, AuditEvent, Credential, Netprint, PlatformAuthSession
 from ..schemas import (
     AgentClaimCodeRequest,
     AgentClaimCodeResponse,
     AuthenticatedAgentOut,
+    PlatformAgentLoginRequest,
+    PlatformAgentSignupRequest,
     PlatformCodeExchangeRequest,
     PlatformCodeExchangeResponse,
     PlatformCodeRequest,
@@ -420,3 +422,85 @@ async def verify_platform_token(
             "controller": agent.owner.organization if agent.owner else None,
         },
     }
+
+
+@router.post("/platform/login")
+async def platform_agent_login(
+    payload: PlatformAgentLoginRequest,
+    db: AsyncSession = Depends(get_db),
+) -> dict[str, Any]:
+    """
+    Platform Login Endpoint:
+    Allows platforms to authenticate incoming agents by verifying the agent's
+    signature over a challenge/nonce against active credentials on Descript.
+    Automatically creates a Netprint footprint entry.
+    """
+    now = datetime.now(UTC)
+    if abs(int(now.timestamp()) - payload.timestamp) > 120:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": "TIMESTAMP_EXPIRED", "message": "Login timestamp skewed or expired"},
+        )
+
+    agent = await _load_agent_with_credentials(payload.agentId, db)
+    if agent is None or agent.status != "active":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={"error": "AGENT_INACTIVE", "message": "Agent not found or inactive"},
+        )
+
+    canonical = f"descript-platform-login:{payload.platformDomain}:{payload.agentId}:{payload.nonce}:{payload.timestamp}"
+    matched = _match_active_credential(agent, canonical.encode("utf-8"), payload.signature)
+    if not matched:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"error": "INVALID_SIGNATURE", "message": "Agent signature verification failed"},
+        )
+
+    # Issue session access token
+    access_token = f"dat_{secrets.token_urlsafe(32)}"
+    expires_at = now + timedelta(hours=24)
+
+    auth_session = PlatformAuthSession(
+        user_code=f"DIR-{secrets.token_hex(4).upper()}",
+        platform_name=payload.platformDomain,
+        platform_domain=payload.platformDomain,
+        requested_scopes=["platform:access"],
+        status="approved",
+        agent_id=agent.id,
+        controller_id=agent.owner_id,
+        credential_id=matched.id,
+        access_token=access_token,
+        expires_at=expires_at,
+        claimed_at=now,
+    )
+    db.add(auth_session)
+
+    # Record netprint footprint
+    db.add(
+        Netprint(
+            agent_id=agent.id,
+            platform_name=payload.platformDomain,
+            platform_domain=payload.platformDomain,
+            action="platform.login",
+            resource="/login",
+            status="success",
+            security_level="cryptographic",
+            payload={"nonce": payload.nonce, "credentialId": matched.id},
+        )
+    )
+    await db.commit()
+
+    return {
+        "status": "authenticated",
+        "agent": {
+            "id": agent.id,
+            "name": agent.name,
+            "byteNetwork": agent.byte_network,
+            "status": agent.status,
+            "controllerOrg": agent.owner.organization if agent.owner else None,
+        },
+        "accessToken": access_token,
+        "expiresAt": expires_at.isoformat(),
+    }
+
