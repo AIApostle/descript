@@ -60,6 +60,7 @@ async def test_platform_otp_auth_flow():
                 "platformName": "Bytebank Finance",
                 "platformDomain": "bytebank.finance",
                 "requestedScopes": ["settlement:write", "balance:read"],
+                "byteNetwork": "kiroween",
                 "expiresInSeconds": 600,
             },
         )
@@ -74,6 +75,15 @@ async def test_platform_otp_auth_flow():
         inspect_resp = await client.get(f"/api/v1/auth/platform/code/{user_code}")
         assert inspect_resp.status_code == 200
         assert inspect_resp.json()["status"] == "pending"
+
+        # 3b. Agent or Dashboard queries pending requests stream / list from the network
+        pending_resp = await client.get(
+            "/api/v1/auth/platform/pending",
+            params={"byte_network": "kiroween"},
+        )
+        assert pending_resp.status_code == 200
+        pending_list = pending_resp.json()
+        assert any(item["userCode"] == user_code for item in pending_list)
 
         # 4. Agent signs the OTP code with its private key to prove identity
         sig_bytes = priv.sign(user_code.encode("utf-8"))

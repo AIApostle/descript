@@ -350,6 +350,7 @@ class PlatformCodeRequest(BaseModel):
     platformDomain: str = Field(..., min_length=3, max_length=128)
     requestedScopes: list[str] = Field(default_factory=list)
     agentId: str | None = None
+    byteNetwork: str | None = None
     expiresInSeconds: int = Field(default=900, ge=60, le=3600)
 
 
@@ -359,9 +360,24 @@ class PlatformCodeResponse(BaseModel):
     platformName: str
     platformDomain: str
     requestedScopes: list[str]
+    byteNetwork: str | None = None
     verificationUri: str
     expiresAt: datetime
     pollInterval: int = 2
+
+
+class PlatformPendingSessionOut(BaseModel):
+    authSessionId: str
+    userCode: str
+    platformName: str
+    platformDomain: str
+    requestedScopes: list[str]
+    byteNetwork: str | None = None
+    agentId: str | None = None
+    status: str
+    expiresAt: datetime
+    createdAt: datetime
+
 
 
 class AgentClaimCodeRequest(BaseModel):

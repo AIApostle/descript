@@ -175,9 +175,39 @@ class PlatformCodeSession(BaseModel):
     platformName: str
     platformDomain: str
     requestedScopes: list[str] = Field(default_factory=list)
+    byteNetwork: str | None = None
     verificationUri: str
     expiresAt: datetime
     pollInterval: int = 2
+
+    @property
+    def user_code(self) -> str:
+        return self.userCode
+
+    @property
+    def auth_session_id(self) -> str:
+        return self.authSessionId
+
+
+class PlatformPendingSession(BaseModel):
+    authSessionId: str
+    userCode: str
+    platformName: str
+    platformDomain: str
+    requestedScopes: list[str] = Field(default_factory=list)
+    byteNetwork: str | None = None
+    agentId: str | None = None
+    status: str
+    expiresAt: datetime
+    createdAt: datetime
+
+    @property
+    def user_code(self) -> str:
+        return self.userCode
+
+    @property
+    def auth_session_id(self) -> str:
+        return self.authSessionId
 
 
 class AgentClaimResult(BaseModel):
@@ -205,4 +235,8 @@ class PlatformTokenExchange(BaseModel):
     grantedScopes: list[str] = Field(default_factory=list)
     accessToken: str | None = None
     expiresAt: datetime | None = None
+
+    @property
+    def access_token(self) -> str | None:
+        return self.accessToken
 

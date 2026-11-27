@@ -174,6 +174,7 @@ class PlatformAuthSession(Base):
     platform_domain: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
     requested_scopes: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
     status: Mapped[str] = mapped_column(String(32), default="pending", index=True, nullable=False)
+    byte_network: Mapped[str | None] = mapped_column(ForeignKey("byte_networks.slug", ondelete="SET NULL"), nullable=True)
     agent_id: Mapped[str | None] = mapped_column(ForeignKey("agents.id", ondelete="CASCADE"), nullable=True)
     controller_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     credential_id: Mapped[str | None] = mapped_column(String(64), nullable=True)

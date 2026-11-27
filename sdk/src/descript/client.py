@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Self
+from datetime import UTC, datetime
+from typing import Any, AsyncIterator, Iterator, Self
 
 import httpx
 
@@ -28,6 +29,7 @@ from .models import (
     HealthStatus,
     IssuerInfo,
     PlatformCodeSession,
+    PlatformPendingSession,
     PlatformTokenExchange,
     User,
     VerificationResult,
@@ -477,6 +479,21 @@ class _SyncPlatformAuthResource:
         )
         return PlatformTokenExchange.model_validate(data)
 
+    def list_pending(
+        self,
+        *,
+        agent_id: str | None = None,
+        byte_network: str | None = None,
+    ) -> list[PlatformPendingSession]:
+        """List active pending authentication requests for this agent or network."""
+        params: dict[str, str] = {}
+        if agent_id:
+            params["agent_id"] = agent_id
+        if byte_network:
+            params["byte_network"] = byte_network
+        data = self._c._request("GET", "/auth/platform/pending", params=params)
+        return [PlatformPendingSession.model_validate(item) for item in data]
+
     def verify_token(self, token: str) -> dict[str, Any]:
         """Called by third-party platforms to verify an incoming Descript Agent Token."""
         return self._c._request("POST", "/auth/platform/token/verify", params={"token": token})
@@ -909,6 +926,53 @@ class _AsyncPlatformAuthResource:
             },
         )
         return PlatformTokenExchange.model_validate(data)
+
+    async def list_pending(
+        self,
+        *,
+        agent_id: str | None = None,
+        byte_network: str | None = None,
+    ) -> list[PlatformPendingSession]:
+        """List active pending authentication requests for this agent or network."""
+        params: dict[str, str] = {}
+        if agent_id:
+            params["agent_id"] = agent_id
+        if byte_network:
+            params["byte_network"] = byte_network
+        data = await self._c._request("GET", "/auth/platform/pending", params=params)
+        return [PlatformPendingSession.model_validate(item) for item in data]
+
+    async def stream_requests(
+        self,
+        *,
+        agent_id: str | None = None,
+        byte_network: str | None = None,
+    ) -> AsyncIterator[PlatformPendingSession]:
+        """Asynchronously stream incoming authentication requests in real time from the network."""
+        import json
+        params: dict[str, str] = {}
+        if agent_id:
+            params["agent_id"] = agent_id
+        if byte_network:
+            params["byte_network"] = byte_network
+
+        async with self._c._http.stream("GET", f"{self._c.api_prefix}/auth/platform/stream", params=params, headers=self._c._headers()) as response:
+            _raise_for_error(response)
+            async for line in response.aiter_lines():
+                if line.startswith("data: "):
+                    raw = json.loads(line[6:].strip())
+                    yield PlatformPendingSession(
+                        authSessionId=raw["authSessionId"],
+                        userCode=raw["userCode"],
+                        platformName=raw["platformName"],
+                        platformDomain=raw["platformDomain"],
+                        requestedScopes=raw.get("requestedScopes", []),
+                        byteNetwork=raw.get("byteNetwork"),
+                        agentId=raw.get("agentId"),
+                        status="pending",
+                        expiresAt=datetime.fromisoformat(raw["expiresAt"]),
+                        createdAt=datetime.now(UTC),
+                    )
 
     async def verify_token(self, token: str) -> dict[str, Any]:
         """Called by third-party platforms to verify an incoming Descript Agent Token."""

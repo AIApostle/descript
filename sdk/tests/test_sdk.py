@@ -172,3 +172,41 @@ async def test_async_sdk_against_fastapi_backend(tmp_path: Path, monkeypatch: py
         assert (
             await client.verify.verify_message(agent.id, message="ping", signature=kp2.sign("ping"))
         ).verified is False
+
+        # Reactivate agent and test Platform Auth OTP code flow
+        await client.agents.reactivate(agent.id)
+
+        # 1. External platform requests OTP code
+        platform_session = await client.platform_auth.request_code(
+            platform_name="Bytebank",
+            platform_domain="bytebank.finance",
+            scopes=["settlement:execute"],
+            agent_id=agent.id,
+        )
+        assert platform_session.user_code.startswith("DSC-")
+
+        # 2. Agent receives code from network stream/pending list
+        pending = await client.platform_auth.list_pending(agent_id=agent.id)
+        assert any(p.user_code == platform_session.user_code for p in pending)
+
+        # 3. Agent claims and signs code
+        claim = await client.platform_auth.claim_code(
+            user_code=platform_session.user_code,
+            agent_id=agent.id,
+            keypair=kp2,
+        )
+        assert claim.claimed is True
+
+        # 4. Platform exchanges code for agent access token
+        ex = await client.platform_auth.exchange_code(
+            auth_session_id=platform_session.auth_session_id,
+            user_code=platform_session.user_code,
+        )
+        assert ex.status == "approved"
+        assert ex.access_token is not None
+        assert ex.agent.id == agent.id
+
+        # 5. Platform verifies incoming token
+        v = await client.platform_auth.verify_token(ex.access_token)
+        assert v["valid"] is True
+        assert v["agent"]["id"] == agent.id
