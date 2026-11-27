@@ -1,24 +1,65 @@
-# Environment & secrets
+# ==============================================================================
+# Descript Backend .gitignore
+# ==============================================================================
+
+# Environment files & secrets (DO NOT COMMIT)
 .env
 .env.*
+*.local
 !.env.example
 
-# Local SQLite fallback DB & private keys
+# Neon CLI local cache & state
+.neon
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Build & packaging artifacts
+build/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Testing & Linting
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# SQLite fallback databases & private keys
 *.db
 *.sqlite
 *.sqlite3
 *.pem
+*.key
 
-# Python-generated files
-__pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info/
-
-# Virtual environments & caches
-.venv/
-.pytest_cache/
-.ruff_cache/
-.mypy_cache/
+# OS & Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
