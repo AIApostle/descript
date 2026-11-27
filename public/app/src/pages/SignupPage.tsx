@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Building2, Check, Fingerprint, Lock, Mail, Shield, User } from 'lucide-react';
+import { ArrowLeft, Building2, Check, Eye, EyeOff, Fingerprint, Lock, Mail, Shield, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/layout/Footer';
 import Navigation from '../components/layout/Navigation';
@@ -23,6 +23,8 @@ export default function SignupPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -217,15 +219,23 @@ export default function SignupPage() {
                       </div>
                       <input
                         id="signup-password"
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className={`pl-10 w-full px-4 py-3 border ${
+                        className={`pl-10 pr-10 w-full px-4 py-3 border ${
                           errors.password ? 'border-red-400' : 'border-base-300 dark:border-base-700'
                         } bg-white dark:bg-base-900 text-base-900 dark:text-base-100 rounded-lg focus:ring-2 focus:ring-descript-500/20 focus:border-descript-500 outline-none`}
                         placeholder="Minimum 8 characters"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-base-400 hover:text-base-600 dark:hover:text-base-200"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
                     </div>
                     {errors.password && (
                       <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.password}</p>
@@ -245,15 +255,23 @@ export default function SignupPage() {
                       </div>
                       <input
                         id="signup-confirm"
-                        type="password"
+                        type={showConfirmPassword ? 'text' : 'password'}
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
-                        className={`pl-10 w-full px-4 py-3 border ${
+                        className={`pl-10 pr-10 w-full px-4 py-3 border ${
                           errors.confirmPassword ? 'border-red-400' : 'border-base-300 dark:border-base-700'
                         } bg-white dark:bg-base-900 text-base-900 dark:text-base-100 rounded-lg focus:ring-2 focus:ring-descript-500/20 focus:border-descript-500 outline-none`}
                         placeholder="Repeat password"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-base-400 hover:text-base-600 dark:hover:text-base-200"
+                        aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
                     </div>
                     {errors.confirmPassword && (
                       <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.confirmPassword}</p>

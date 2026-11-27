@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Fingerprint, Lock, Mail, Shield } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Fingerprint, Lock, Mail, Shield } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Footer from '../components/layout/Footer';
 import Navigation from '../components/layout/Navigation';
@@ -22,6 +22,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,16 +145,24 @@ export default function LoginPage() {
                   </div>
                   <input
                     id="login-password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`pl-10 w-full px-4 py-3 border ${
+                    className={`pl-10 pr-10 w-full px-4 py-3 border ${
                       errors.password ? 'border-red-400' : 'border-base-300 dark:border-base-700'
                     } bg-white dark:bg-base-900 text-base-900 dark:text-base-100 rounded-lg focus:ring-2 focus:ring-descript-500/20 focus:border-descript-500 outline-none transition-colors`}
                     placeholder="Enter your password"
                     disabled={isLoading}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-base-400 hover:text-base-600 dark:hover:text-base-200"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
                 {errors.password && (
                   <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">{errors.password}</p>

@@ -70,7 +70,7 @@ class Settings(BaseSettings):
     issuer_private_key: str | None = Field(default=None, alias="DESCRIPT_ISSUER_PRIVATE_KEY")
 
     cors_origins: str = Field(
-        default="http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://localhost:3000",
+        default="https://trydescript.vercel.app,https://descript-ffch.onrender.com,http://localhost:5173,http://127.0.0.1:5173",
         alias="CORS_ORIGINS",
     )
 
