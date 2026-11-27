@@ -115,26 +115,6 @@ print(f"Agent '{agent.name}' authentic: {is_valid}")`;
                 <span>Documentation</span>
               </Link>
             </div>
-
-            {/* Key Specs Pills */}
-            <div className="pt-6 border-t border-base-200/80 dark:border-base-800/80 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-base-600 dark:text-base-400">
-              <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
-                <span className="font-semibold text-base-900 dark:text-white block">Curve25519</span>
-                <span>Pure Ed25519 Keys</span>
-              </div>
-              <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
-                <span className="font-semibold text-base-900 dark:text-white block">Zero Custody</span>
-                <span>Private keys stay local</span>
-              </div>
-              <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
-                <span className="font-semibold text-base-900 dark:text-white block">Persistent ID</span>
-                <span>Canonical UUIDv7</span>
-              </div>
-              <div className="p-2 rounded-lg bg-base-50/60 dark:bg-base-900/30 border border-base-200/40 dark:border-base-800/40">
-                <span className="font-semibold text-base-900 dark:text-white block">Bytecript</span>
-                <span>Portable Credential</span>
-              </div>
-            </div>
           </div>
 
           {/* Right Column: Interactive Cryptographic Console / Bytecript Playground */}

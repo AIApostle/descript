@@ -14,8 +14,8 @@ export default function LandingPage() {
       <main>
         <HeroSection />
         <ProblemSection />
-        <ValuePropositionSection />
         <HowItWorksSection />
+        <ValuePropositionSection />
         <UseCasesSection />
         <CTASection />
       </main>

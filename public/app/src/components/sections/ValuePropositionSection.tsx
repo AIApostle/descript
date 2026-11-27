@@ -106,39 +106,6 @@ export default function ValuePropositionSection() {
             </div>
           ))}
         </div>
-
-        {/* Verification Matrix Callout */}
-        <div className="max-w-6xl mx-auto double-bezel">
-          <div className="double-bezel-inner p-6 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8">
-            <div className="space-y-2 text-center lg:text-left">
-              <span className="text-xs font-mono uppercase tracking-widest text-descript-600 dark:text-descript-400 font-bold">
-                Verification Matrix
-              </span>
-              <h3 className="text-2xl font-bold text-base-950 dark:text-white">
-                Offline or Online. You choose the trust model.
-              </h3>
-              <p className="text-sm text-base-600 dark:text-base-300 max-w-2xl leading-relaxed">
-                Relying services can verify Bytecript signatures offline using public keys and math alone,
-                or query Descript’s live API to check real-time suspension and revocation states.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
-              <div className="px-4 py-2.5 rounded-xl bg-base-50 dark:bg-base-900 border border-base-200 dark:border-base-800 text-center">
-                <div className="text-xs text-base-400 font-medium">Offline Latency</div>
-                <div className="text-base font-bold font-mono text-descript-600 dark:text-descript-400">
-                  &lt; 0.2ms
-                </div>
-              </div>
-              <div className="px-4 py-2.5 rounded-xl bg-base-50 dark:bg-base-900 border border-base-200 dark:border-base-800 text-center">
-                <div className="text-xs text-base-400 font-medium">Key Custody</div>
-                <div className="text-base font-bold font-mono text-base-900 dark:text-white">
-                  Zero Server Custody
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

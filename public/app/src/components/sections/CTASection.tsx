@@ -1,17 +1,7 @@
-import { useState } from 'react';
-import { ArrowRight, Check, CheckCircle2, Copy, ShieldCheck, Terminal } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function CTASection() {
-  const [copied, setCopied] = useState(false);
-  const installCommand = 'pip install descript';
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(installCommand);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <section className="py-24 sm:py-32 relative overflow-hidden bg-base-950 text-white">
       {/* Background ambient lighting */}
@@ -35,58 +25,21 @@ export default function CTASection() {
             Deploy your first verifiable agent in under two minutes
           </h2>
 
-          <p className="text-base sm:text-lg text-base-300 leading-relaxed max-w-2xl mx-auto mb-8">
+          <p className="text-base sm:text-lg text-base-300 leading-relaxed max-w-2xl mx-auto mb-10">
             Generate Ed25519 keys, mint a persistent Bytecript identity passport, and start verifying
-            cross-service interactions using the Python SDK.
+            cross-service interactions.
           </p>
 
-          {/* Quick CLI Install Pill */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-black/50 border border-white/10 font-mono text-xs text-base-300 mb-10 shadow-inner">
-            <Terminal className="h-3.5 w-3.5 text-descript-400 shrink-0" />
-            <span className="text-white select-all">{installCommand}</span>
-            <button
-              type="button"
-              onClick={handleCopy}
-              aria-label="Copy install command"
-              className="btn-step p-1 rounded hover:bg-white/10 text-base-400 hover:text-white transition-colors"
-            >
-              {copied ? <Check className="h-3.5 w-3.5 text-identity-400" /> : <Copy className="h-3.5 w-3.5" />}
-            </button>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+          <div className="flex items-center justify-center">
             <Link
               to="/signup"
-              className="btn-step group w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-descript-600 hover:bg-descript-700 text-white font-semibold text-base px-8 py-4 rounded-full shadow-lg shadow-descript-600/25 transition-all duration-200 active:scale-[0.98]"
+              className="btn-step group inline-flex items-center justify-center gap-3 bg-descript-600 hover:bg-descript-700 text-white font-semibold text-base px-8 py-4 rounded-full shadow-lg shadow-descript-600/25 transition-all duration-200 active:scale-[0.98]"
             >
-              <span>Get Started Now</span>
+              <span>Get Started</span>
               <span className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
                 <ArrowRight className="h-3.5 w-3.5" />
               </span>
             </Link>
-
-            <Link
-              to="/docs"
-              className="btn-step w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-semibold text-base px-7 py-4 rounded-full border border-white/10 transition-all duration-200"
-            >
-              <Terminal className="h-4 w-4 text-descript-400" />
-              <span>Explore Python SDK</span>
-            </Link>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-base-400">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-identity-400" />
-              <span>Free Community Registry</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-identity-400" />
-              <span>No Credit Card Required</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-identity-400" />
-              <span>Zero Server Key Custody</span>
-            </div>
           </div>
         </div>
       </div>

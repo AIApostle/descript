@@ -19,7 +19,6 @@ export default function Navigation() {
 
   const navItems = [
     { label: 'How It Works', to: '/#how-it-works', isHash: true },
-    { label: 'Architecture', to: '/#value', isHash: true },
     { label: 'Use Cases', to: '/#use-cases', isHash: true },
     { label: 'Docs', to: '/docs', isHash: false },
   ];
