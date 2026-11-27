@@ -128,11 +128,26 @@ async def seed_default_networks(session: AsyncSession) -> None:
 
 
 async def init_db() -> None:
+    from pathlib import Path
+    from sqlalchemy import text
     from . import models  # noqa: F401
 
-    engine = get_engine()
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    settings = get_settings()
+    db_dir = Path(__file__).resolve().parents[3] / "db"
+    if settings.is_postgres and db_dir.is_dir():
+        # Execute modular SQL scripts from db/ using unpooled direct connection
+        unpooled_engine, _ = create_engine_and_session(settings.normalized_database_url_unpooled)
+        try:
+            async with unpooled_engine.begin() as conn:
+                for sql_file in sorted(db_dir.glob("*.sql")):
+                    content = sql_file.read_text(encoding="utf-8")
+                    await conn.execute(text(content))
+        finally:
+            await unpooled_engine.dispose()
+    else:
+        engine = get_engine()
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
 
     session_factory = get_session_factory()
     async with session_factory() as session:

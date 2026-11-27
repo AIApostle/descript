@@ -30,7 +30,7 @@ def normalize_database_url(raw_url: str) -> str:
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=(".env", "../.env"),
+        env_file=(".env.local", "../.env.local", ".env", "../.env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )
@@ -40,11 +40,22 @@ class Settings(BaseSettings):
     environment: str = Field(default="development")
     api_prefix: str = "/api/v1"
 
-    # Neon PostgreSQL connection string (defaults to local SQLite only for zero-config dev/test)
+    # Neon PostgreSQL connection string (pooled by default for app runtime)
     database_url: str = Field(
         default="sqlite+aiosqlite:///./descript_dev.db",
         alias="DATABASE_URL",
     )
+    # Direct unpooled connection string for DDL / migrations
+    database_url_unpooled: str | None = Field(
+        default=None,
+        alias="DATABASE_URL_UNPOOLED",
+    )
+
+    # Neon Auth & branch metadata
+    neon_auth_base_url: str | None = Field(default=None, alias="NEON_AUTH_BASE_URL")
+    neon_auth_jwks_url: str | None = Field(default=None, alias="NEON_AUTH_JWKS_URL")
+    neon_branch: str | None = Field(default=None, alias="NEON_BRANCH")
+    neon_branch_id: str | None = Field(default=None, alias="NEON_BRANCH_ID")
 
     jwt_secret: str = Field(
         default="dev-descript-jwt-secret-change-in-production-32bytes",
@@ -66,6 +77,12 @@ class Settings(BaseSettings):
     @property
     def normalized_database_url(self) -> str:
         return normalize_database_url(self.database_url)
+
+    @property
+    def normalized_database_url_unpooled(self) -> str:
+        if self.database_url_unpooled:
+            return normalize_database_url(self.database_url_unpooled)
+        return self.normalized_database_url
 
     @property
     def is_postgres(self) -> bool:

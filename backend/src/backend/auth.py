@@ -57,25 +57,44 @@ def create_refresh_token(user_id: str, email: str) -> str:
 
 def decode_token(token: str, expected_type: str = "access") -> dict[str, Any]:
     settings = get_settings()
+
+    # 1. Try internal JWT secret first
     try:
         payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+        if payload.get("type") != expected_type:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail={"error": "INVALID_TOKEN_TYPE", "message": f"Expected {expected_type} token"},
+            )
+        return payload
     except jwt.ExpiredSignatureError as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={"error": "TOKEN_EXPIRED", "message": "Authentication token has expired"},
         ) from exc
-    except jwt.InvalidTokenError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail={"error": "INVALID_TOKEN", "message": "Invalid authentication token"},
-        ) from exc
+    except jwt.InvalidTokenError:
+        pass
 
-    if payload.get("type") != expected_type:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail={"error": "INVALID_TOKEN_TYPE", "message": f"Expected {expected_type} token"},
-        )
-    return payload
+    # 2. If Neon Auth JWKS URL is configured, try verifying against Managed Neon Auth
+    if settings.neon_auth_jwks_url:
+        try:
+            jwks_client = jwt.PyJWKClient(settings.neon_auth_jwks_url)
+            signing_key = jwks_client.get_signing_key_from_jwt(token)
+            payload = jwt.decode(
+                token,
+                signing_key.key,
+                algorithms=["RS256", "EdDSA", "ES256"],
+                options={"verify_aud": False},
+            )
+            payload["_neon_auth"] = True
+            return payload
+        except Exception:
+            pass
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail={"error": "INVALID_TOKEN", "message": "Invalid authentication token"},
+    )
 
 
 async def _authenticate_api_key(token: str, db: AsyncSession) -> AuthActor:
@@ -121,6 +140,23 @@ async def get_current_actor(
         user_id = payload.get("sub")
         result = await db.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
+        if user is None and payload.get("_neon_auth"):
+            email = payload.get("email")
+            if email:
+                user = (await db.execute(select(User).where(User.email == email))).scalar_one_or_none()
+                if user is None:
+                    import uuid
+                    user = User(
+                        id=str(uuid.uuid4()),
+                        email=email,
+                        name=payload.get("name") or email.split("@")[0],
+                        password_hash="neon_managed_auth",
+                        role="user",
+                        email_verified=True,
+                    )
+                    db.add(user)
+                    await db.commit()
+                    await db.refresh(user)
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
