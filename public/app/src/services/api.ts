@@ -1,6 +1,21 @@
 import type { AuthResponseDTO } from '../types/auth';
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, '') || '/api/v1';
+const DEFAULT_PRODUCTION_API_URL = 'https://descript-ffch.onrender.com/api/v1';
+
+const resolveApiBaseUrl = (): string => {
+  const envUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim();
+  if (envUrl) {
+    return envUrl.replace(/\/$/, '');
+  }
+  // When running in production on Vercel or any non-localhost host without a local proxy,
+  // target the live Render production backend directly.
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return DEFAULT_PRODUCTION_API_URL;
+  }
+  return '/api/v1';
+};
+
+const API_BASE_URL = resolveApiBaseUrl();
 export const SESSION_STORAGE_KEY = 'descript_session';
 
 export class APIError extends Error {
